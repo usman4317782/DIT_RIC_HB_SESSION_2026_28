@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ICT MCQ Quiz — What Is a Computer?</title>
+<style>
+  :root {
+    --navy: #1f3864;
+    --navy-light: #2e5395;
+    --gold: #bf8f00;
+    --green: #375623;
+    --green-bg: #e2efda;
+    --red: #a12525;
+    --red-bg: #fbe7e7;
+    --bg: #f4f6fa;
+    --card: #ffffff;
+    --border: #e0e4ec;
+    --text: #1c1c1c;
+    --muted: #6b7280;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 16px 16px 40px;
+  }
+  header.top {
+    background: var(--navy);
+    color: #fff;
+    padding: 18px 16px 16px;
+    border-radius: 0 0 14px 14px;
+    margin-bottom: 16px;
+  }
+  header.top h1 {
+    margin: 0 0 4px;
+    font-size: 1.15rem;
+    line-height: 1.35;
+  }
+  header.top p {
+    margin: 0;
+    font-size: 0.82rem;
+    color: #cdd8ea;
+  }
+
+  .progress-bar-outer {
+    background: rgba(255,255,255,0.25);
+    border-radius: 8px;
+    height: 8px;
+    margin-top: 12px;
+    overflow: hidden;
+  }
+  .progress-bar-inner {
+    background: #ffe699;
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  #screen-start .card { text-align: center; padding: 28px 20px; }
+  #screen-start h2 { color: var(--navy); margin-top: 0; }
+  #screen-start p { color: var(--muted); font-size: 0.92rem; line-height: 1.5; }
+
+  .btn {
+    display: inline-block;
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 13px 22px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+  }
+  .btn:active { background: var(--navy-light); }
+  .btn.secondary {
+    background: #fff;
+    color: var(--navy);
+    border: 1.5px solid var(--navy);
+  }
+  .btn.small {
+    width: auto;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+
+  .qmeta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .qmeta .badge {
+    background: var(--navy);
+    color: #fff;
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-weight: 600;
+  }
+
+  .qtext {
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.45;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    font-size: 0.96rem;
+    line-height: 1.4;
+    cursor: pointer;
+    background: #fafbfc;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .option:active { background: #eef1f6; }
+  .option .letter {
+    flex: 0 0 auto;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid #b9c0cc;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 700; color: var(--muted);
+  }
+  .option.selected { border-color: var(--navy-light); background: #eaf0fb; }
+  .option.selected .letter { background: var(--navy-light); border-color: var(--navy-light); color: #fff; }
+
+  .option.correct { border-color: #4c8c3f; background: var(--green-bg); }
+  .option.correct .letter { background: #4c8c3f; border-color: #4c8c3f; color: #fff; }
+  .option.incorrect { border-color: var(--red); background: var(--red-bg); }
+  .option.incorrect .letter { background: var(--red); border-color: var(--red); color: #fff; }
+  .option.disabled { cursor: default; }
+
+  .feedback {
+    margin-top: 4px;
+    margin-bottom: 14px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    line-height: 1.4;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.good { background: var(--green-bg); color: var(--green); }
+  .feedback.bad { background: var(--red-bg); color: var(--red); }
+
+  .navrow { display: flex; gap: 10px; margin-top: 6px; }
+  .navrow .btn { margin-top: 0; }
+
+  #screen-result .card { text-align: center; }
+  .score-circle {
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    border: 8px solid var(--navy);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    margin: 10px auto 18px;
+  }
+  .score-circle .num { font-size: 2rem; font-weight: 800; color: var(--navy); }
+  .score-circle .den { font-size: 0.8rem; color: var(--muted); }
+
+  .review-item {
+    text-align: left;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+  }
+  .review-item .rq { font-weight: 600; font-size: 0.92rem; margin-bottom: 6px; }
+  .review-item .ra { font-size: 0.85rem; margin: 2px 0; }
+  .review-item .ra.correct { color: var(--green); }
+  .review-item .ra.wrong { color: var(--red); }
+  .tag-correct { color: #fff; background: #4c8c3f; border-radius: 6px; padding: 1px 8px; font-size: 0.7rem; font-weight: 700; margin-left: 6px; }
+  .tag-wrong { color: #fff; background: var(--red); border-radius: 6px; padding: 1px 8px; font-size: 0.7rem; font-weight: 700; margin-left: 6px; }
+
+  .hidden { display: none !important; }
+
+  #reviewToggle { margin-top: 16px; }
+
+  footer.offline-note {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.75rem;
+    margin-top: 22px;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <h1 id="quizTitle">Loading…</h1>
+    <p id="quizSubtitle"></p>
+    <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
+  </header>
+
+  <!-- START SCREEN -->
+  <div id="screen-start">
+    <div class="card">
+      <h2>Ready to test yourself?</h2>
+      <p>This quiz contains 40 multiple-choice questions covering the definition of a computer, the IPO Cycle, and the seven key characteristics of a computer. Answer each question — you'll see immediately whether you were right, with a short explanation.</p>
+      <button class="btn" onclick="startQuiz()">Start Quiz</button>
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="screen-quiz" class="hidden">
+    <div class="card">
+      <div class="qmeta">
+        <span class="badge" id="qNumBadge">Q1</span>
+        <span id="qCounter">Question 1 of 40</span>
+      </div>
+      <div class="qtext" id="qText"></div>
+      <div id="optionsContainer"></div>
+      <div class="feedback" id="feedbackBox"></div>
+      <div class="navrow">
+        <button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>Next</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="screen-result" class="hidden">
+    <div class="card">
+      <h2>Quiz Complete!</h2>
+      <div class="score-circle">
+        <div class="num" id="scoreNum">0</div>
+        <div class="den">out of 40</div>
+      </div>
+      <p id="scoreMsg" style="color:var(--muted); font-size:0.92rem;"></p>
+      <button class="btn" onclick="restartQuiz()">Retake Quiz</button>
+      <button class="btn secondary" id="reviewToggle" onclick="toggleReview()">Show Full Review</button>
+      <div id="reviewContainer" class="hidden" style="margin-top:16px; text-align:left;"></div>
+    </div>
+  </div>
+
+  <footer class="offline-note">Works fully offline — no internet connection required.</footer>
+</div>
+
+<script>
+const QUIZ_DATA = {
+  title: "What Is a Computer? — Definition, IPO Cycle & Characteristics",
+  subtitle: "Introduction to ICT — Practice MCQs (40 Questions)",
+  questions: [
+    {q:"According to the definition, what type of device is a computer?", options:["A mechanical device","An electronic device","A biological device","A magnetic device"], correct:1},
+    {q:"What does a computer accept as input according to the definition?", options:["Information","Data","Programs only","Signals only"], correct:1},
+    {q:"A computer processes data according to what?", options:["A set of instructions (a program)","Random selection","User's mood","External weather conditions"], correct:0},
+    {q:"Where is the program (set of instructions) stored according to the definition?", options:["On paper","In its memory","In the user's mind","In the input device only"], correct:1},
+    {q:"What does a computer produce as output?", options:["Raw data","Meaningful information","Random numbers","Electrical noise"], correct:1},
+    {q:"Besides input, processing, and output, what other capability does a computer have according to the definition?", options:["Storing data for future use","Predicting the future","Feeling emotions","Self-repair"], correct:0},
+    {q:"What does the abbreviation 'IPO Cycle' stand for?", options:["Input–Process–Output","Information–Processing–Organization","Input–Program–Output","Instruction–Process–Operation"], correct:0},
+    {q:"The IPO Cycle is extended with which additional stage?", options:["Storage","Networking","Security","Encryption"], correct:0},
+    {q:"In the IPO Cycle table, what is the function of the 'Input' stage?", options:["Data and instructions are entered into the computer","The CPU manipulates and processes raw data","Processed data is presented to the user","Data is saved for future use"], correct:0},
+    {q:"Which example is given for the 'Input' stage?", options:["Saving a file to a hard disk","Typing text on a keyboard, scanning a barcode","Calculating the total of a shopping bill","Displaying the bill on a monitor"], correct:1},
+    {q:"According to the table, what performs the function in the 'Process' stage?", options:["The monitor","The keyboard","The CPU","The printer"], correct:2},
+    {q:"What example is given for the 'Process' stage?", options:["Typing text on a keyboard","Calculating the total of a shopping bill","Printing a receipt","Saving a file to a USB drive"], correct:1},
+    {q:"What is the function of the 'Output' stage?", options:["Data and instructions are entered into the computer","The processed data (information) is presented to the user","The CPU manipulates raw data","Data is saved for future use"], correct:1},
+    {q:"Which examples are given for the 'Output' stage?", options:["Displaying the bill on a monitor, printing a receipt","Typing text on a keyboard","Scanning a barcode","Saving a file to a hard disk"], correct:0},
+    {q:"What is the function of the 'Storage' stage in the IPO Cycle table?", options:["Data, instructions, and results are saved for future use","Data is entered into the computer","Data is calculated","Data is displayed to the user"], correct:0},
+    {q:"What example is given for the 'Storage' stage?", options:["Printing a receipt","Saving a file to a hard disk or USB drive","Calculating a shopping bill","Scanning a barcode"], correct:1},
+    {q:"How many key characteristics of a computer are listed in section 2.1?", options:["Five","Six","Seven","Eight"], correct:2},
+    {q:"The 'Speed' characteristic states a computer performs how many calculations per second?", options:["Hundreds","Thousands","Millions to billions","Trillions to quadrillions"], correct:2},
+    {q:"Computer speed is measured in which units according to the notes?", options:["MIPS/FLOPS","GB/TB","Volts/Amps","Hz only"], correct:0},
+    {q:"The 'Accuracy' characteristic depends on what condition?", options:["The speed of the CPU","The input data and instructions being correct","The storage capacity","The number of users"], correct:1},
+    {q:"What principle is associated with the Accuracy characteristic?", options:["GIGO — Garbage In, Garbage Out","KISS — Keep It Simple","DRY — Don't Repeat Yourself","WYSIWYG"], correct:0},
+    {q:"What does GIGO stand for as stated in the notes?", options:["Garbage In, Garbage Out","Good Input, Good Output","Generate Input, Generate Output","Garbage Input, Great Output"], correct:0},
+    {q:"Which characteristic allows a computer to perform repetitive tasks without fatigue?", options:["Speed","Diligence","Versatility","Automation"], correct:1},
+    {q:"According to the Diligence characteristic, a computer can perform repetitive tasks without which three things?", options:["Fatigue, boredom, or loss of accuracy","Power, memory, or storage","Input, output, or processing","Speed, size, or cost"], correct:0},
+    {q:"Which characteristic refers to storing enormous amounts of data and retrieving it instantly?", options:["Automation","Storage Capacity","Accuracy","Diligence"], correct:1},
+    {q:"Which characteristic describes a computer's ability to perform a wide variety of tasks, from calculations to multimedia to communication?", options:["Versatility","Diligence","No Intelligence","Storage Capacity"], correct:0},
+    {q:"According to the 'Automation' characteristic, what happens once a program is loaded?", options:["The computer requires constant human input for every step","It can execute instructions automatically with minimal human intervention","It stops functioning until restarted","It becomes intelligent"], correct:1},
+    {q:"What does the 'No Intelligence (Feeling)' characteristic state about a computer?", options:["It has emotional intelligence","It has no intelligence of its own and can only do what it is instructed (programmed) to do","It can think independently","It can feel emotions but not express them"], correct:1},
+    {q:"Which stage of the IPO Cycle involves the CPU?", options:["Input","Process","Output","Storage"], correct:1},
+    {q:"Scanning a barcode is an example of which stage?", options:["Input","Process","Output","Storage"], correct:0},
+    {q:"Printing a receipt is an example of which stage?", options:["Input","Process","Output","Storage"], correct:2},
+    {q:"Saving a file to a USB drive is an example of which stage?", options:["Input","Process","Output","Storage"], correct:3},
+    {q:"Which characteristic is directly linked to error-free results?", options:["Accuracy","Versatility","Automation","Storage Capacity"], correct:0},
+    {q:"According to the notes, what does a computer accept along with data as input?", options:["Instructions","Only power","Only sound","Only images"], correct:0},
+    {q:"Typing text on a keyboard is given as an example of which characteristic-related stage?", options:["Input","Process","Output","Storage"], correct:0},
+    {q:"Which characteristic in the notes explicitly mentions 'minimal human intervention'?", options:["Automation","Diligence","Versatility","Accuracy"], correct:0},
+    {q:"Displaying a bill on a monitor is an example of which stage?", options:["Input","Process","Output","Storage"], correct:2},
+    {q:"Which characteristic states a computer can 'store enormous amounts of data'?", options:["Storage Capacity","Versatility","Speed","No Intelligence"], correct:0},
+    {q:"According to the notes, a computer 'can only do what it is instructed to do' relates to which characteristic?", options:["No Intelligence (Feeling)","Automation","Diligence","Accuracy"], correct:0},
+    {q:"Which of the following is NOT listed as one of the seven key characteristics of a computer in the notes?", options:["Creativity","Speed","Accuracy","Diligence"], correct:0}
+  ]
+};
+
+</script>
+<script>
+  let currentIndex = 0;
+  let score = 0;
+  let userAnswers = []; // {selected, correct}
+  let answered = false;
+
+  document.getElementById('quizTitle').textContent = QUIZ_DATA.title;
+  document.getElementById('quizSubtitle').textContent = QUIZ_DATA.subtitle;
+
+  function startQuiz() {
+    currentIndex = 0;
+    score = 0;
+    userAnswers = [];
+    document.getElementById('screen-start').classList.add('hidden');
+    document.getElementById('screen-result').classList.add('hidden');
+    document.getElementById('screen-quiz').classList.remove('hidden');
+    renderQuestion();
+  }
+
+  function restartQuiz() {
+    document.getElementById('reviewContainer').classList.add('hidden');
+    document.getElementById('reviewToggle').textContent = 'Show Full Review';
+    startQuiz();
+  }
+
+  function updateProgress() {
+    const pct = (currentIndex / QUIZ_DATA.questions.length) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+  }
+
+  function renderQuestion() {
+    answered = false;
+    updateProgress();
+    const total = QUIZ_DATA.questions.length;
+    const q = QUIZ_DATA.questions[currentIndex];
+
+    document.getElementById('qNumBadge').textContent = 'Q' + (currentIndex + 1);
+    document.getElementById('qCounter').textContent = 'Question ' + (currentIndex + 1) + ' of ' + total;
+    document.getElementById('qText').textContent = q.q;
+
+    const container = document.getElementById('optionsContainer');
+    container.innerHTML = '';
+    const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+    q.options.forEach((opt, idx) => {
+      const div = document.createElement('div');
+      div.className = 'option';
+      div.innerHTML = '<span class="letter">' + letters[idx] + '</span><span>' + opt + '</span>';
+      div.onclick = () => selectOption(idx);
+      div.dataset.idx = idx;
+      container.appendChild(div);
+    });
+
+    const fb = document.getElementById('feedbackBox');
+    fb.className = 'feedback';
+    fb.textContent = '';
+
+    const nextBtn = document.getElementById('nextBtn');
+    nextBtn.disabled = true;
+    nextBtn.textContent = (currentIndex === total - 1) ? 'Finish Quiz' : 'Next';
+  }
+
+  function selectOption(idx) {
+    if (answered) return;
+    answered = true;
+    const q = QUIZ_DATA.questions[currentIndex];
+    const options = document.querySelectorAll('.option');
+    const isCorrect = idx === q.correct;
+
+    options.forEach((el, i) => {
+      el.classList.add('disabled');
+      if (i === q.correct) el.classList.add('correct');
+      if (i === idx && !isCorrect) el.classList.add('incorrect');
+      if (i === idx) el.classList.add('selected');
+    });
+
+    const fb = document.getElementById('feedbackBox');
+    fb.classList.add('show');
+    if (isCorrect) {
+      fb.classList.add('good');
+      fb.textContent = '✔ Correct!';
+      score++;
+    } else {
+      fb.classList.add('bad');
+      fb.textContent = '✘ Not quite. Correct answer: ' + q.options[q.correct];
+    }
+
+    userAnswers.push({ selected: idx, correct: q.correct, isCorrect });
+    document.getElementById('nextBtn').disabled = false;
+  }
+
+  function nextQuestion() {
+    if (!answered) return;
+    currentIndex++;
+    if (currentIndex >= QUIZ_DATA.questions.length) {
+      showResult();
+    } else {
+      renderQuestion();
+    }
+  }
+
+  function showResult() {
+    document.getElementById('progressBar').style.width = '100%';
+    document.getElementById('screen-quiz').classList.add('hidden');
+    document.getElementById('screen-result').classList.remove('hidden');
+    const total = QUIZ_DATA.questions.length;
+    document.getElementById('scoreNum').textContent = score + '/' + total;
+
+    const pct = Math.round((score / total) * 100);
+    let msg;
+    if (pct === 100) msg = "Perfect score! You've fully mastered this topic.";
+    else if (pct >= 80) msg = "Excellent work! Just a few points to review.";
+    else if (pct >= 60) msg = "Good effort. Review the missed questions below.";
+    else msg = "Keep practicing — review the explanations below carefully.";
+    document.getElementById('scoreMsg').textContent = pct + '% — ' + msg;
+
+    buildReview();
+  }
+
+  function buildReview() {
+    const container = document.getElementById('reviewContainer');
+    container.innerHTML = '';
+    QUIZ_DATA.questions.forEach((q, i) => {
+      const ans = userAnswers[i];
+      const div = document.createElement('div');
+      div.className = 'review-item';
+      const tag = ans.isCorrect ? '<span class="tag-correct">CORRECT</span>' : '<span class="tag-wrong">WRONG</span>';
+      let html = '<div class="rq">Q' + (i+1) + '. ' + q.q + tag + '</div>';
+      html += '<div class="ra correct">Correct answer: ' + q.options[q.correct] + '</div>';
+      if (!ans.isCorrect) {
+        html += '<div class="ra wrong">Your answer: ' + q.options[ans.selected] + '</div>';
+      }
+      div.innerHTML = html;
+      container.appendChild(div);
+    });
+  }
+
+  function toggleReview() {
+    const container = document.getElementById('reviewContainer');
+    const btn = document.getElementById('reviewToggle');
+    container.classList.toggle('hidden');
+    btn.textContent = container.classList.contains('hidden') ? 'Show Full Review' : 'Hide Review';
+  }
+</script>
+</body>
+</html>
