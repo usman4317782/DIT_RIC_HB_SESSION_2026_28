@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ICT Quiz — History and Evolution of Computers</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f4f7fb;--card:#ffffff;--text:#1e293b;--muted:#64748b;
+  --primary:#2563eb;--primary-dark:#1d4ed8;--border:#e2e8f0;
+  --green:#16a34a;--green-bg:#dcfce7;--red:#dc2626;--red-bg:#fee2e2;
+  --amber:#d97706;--shadow:0 4px 16px rgba(30,41,59,.08);
+}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;padding:12px}
+.wrap{max-width:860px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:22px;margin-bottom:16px}
+h1{font-size:1.55rem;color:var(--primary-dark);margin-bottom:6px;line-height:1.3}
+h2{font-size:1.2rem;margin-bottom:10px}
+.sub{color:var(--muted);font-size:.95rem;margin-bottom:14px}
+.badge{display:inline-block;background:#eff6ff;color:var(--primary-dark);border:1px solid #bfdbfe;border-radius:999px;padding:3px 12px;font-size:.8rem;font-weight:600;margin:3px 4px 3px 0}
+.badge.g{background:var(--green-bg);color:#15803d;border-color:#86efac}
+.badge.a{background:#fef3c7;color:#92400e;border-color:#fcd34d}
+.badge.r{background:var(--red-bg);color:#991b1b;border-color:#fca5a5}
+ul.ins{margin:10px 0 16px 20px}
+ul.ins li{margin-bottom:6px;font-size:.95rem}
+button{font-family:inherit;font-size:1rem;border:none;border-radius:10px;padding:12px 20px;cursor:pointer;font-weight:600;transition:background .15s,transform .1s}
+button:active{transform:scale(.98)}
+button:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-primary:disabled{background:#94a3b8;cursor:not-allowed}
+.btn-sec{background:#e2e8f0;color:#334155}
+.btn-sec:hover{background:#cbd5e1}
+.btn-sec:disabled{opacity:.45;cursor:not-allowed}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;margin-top:16px}
+.hidden{display:none!important}
+.prog-wrap{background:#e2e8f0;border-radius:999px;height:10px;overflow:hidden;margin:10px 0 4px}
+.prog-bar{height:100%;width:0;background:linear-gradient(90deg,#2563eb,#3b82f6);transition:width .3s}
+.prog-meta{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted);margin-bottom:12px}
+.q-num{font-size:.8rem;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.q-text{font-size:1.08rem;font-weight:600;margin-bottom:14px}
+.opt{display:block;width:100%;text-align:left;background:#f8fafc;border:2px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:9px;cursor:pointer;font-size:.98rem;transition:border .15s,background .15s;color:var(--text)}
+.opt:hover:not(.locked){border-color:#93c5fd;background:#eff6ff}
+.opt:focus-visible{outline:3px solid #93c5fd;outline-offset:1px}
+.opt .ltr{display:inline-block;font-weight:700;margin-right:8px;color:var(--primary-dark)}
+.opt.correct{background:var(--green-bg);border-color:var(--green)}
+.opt.correct .ltr{color:#15803d}
+.opt.wrong{background:var(--red-bg);border-color:var(--red)}
+.opt.wrong .ltr{color:#991b1b}
+.opt.locked{cursor:default}
+.fb{border-radius:11px;padding:12px 14px;margin-top:6px;font-size:.95rem;border:1px solid}
+.fb.ok{background:var(--green-bg);border-color:#86efac;color:#14532d}
+.fb.no{background:var(--red-bg);border-color:#fca5a5;color:#7f1d1d}
+.fb .fb-title{font-weight:700;margin-bottom:4px}
+.fb .exp{margin-top:6px;padding-top:6px;border-top:1px dashed rgba(0,0,0,.15);font-size:.9rem}
+.diff{font-size:.72rem;font-weight:700;padding:2px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:.4px}
+.diff.Easy{background:var(--green-bg);color:#15803d}
+.diff.Medium{background:#fef3c7;color:#92400e}
+.diff.Hard{background:var(--red-bg);color:#991b1b}
+.tag-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.topic{font-size:.78rem;color:var(--muted);font-weight:600}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:14px 0}
+.res-box{background:#f8fafc;border:1px solid var(--border);border-radius:11px;padding:12px;text-align:center}
+.res-box .n{font-size:1.5rem;font-weight:800;color:var(--primary-dark)}
+.res-box .l{font-size:.78rem;color:var(--muted);font-weight:600}
+.grade{text-align:center;padding:16px;border-radius:12px;margin:12px 0;font-weight:700;font-size:1.15rem}
+.grade.excellent{background:var(--green-bg);color:#14532d}
+.grade.verygood{background:#dbeafe;color:#1e40af}
+.grade.good{background:#e0f2fe;color:#075985}
+.grade.improve{background:#fef3c7;color:#92400e}
+.grade.practice{background:var(--red-bg);color:#7f1d1d}
+.rec{background:#f8fafc;border-left:4px solid var(--primary);border-radius:8px;padding:12px 14px;margin-bottom:10px;font-size:.93rem}
+.rec b{color:var(--primary-dark)}
+.topic-stat{display:flex;justify-content:space-between;font-size:.88rem;padding:5px 0;border-bottom:1px dashed var(--border)}
+.topic-stat:last-child{border-bottom:none}
+.topic-stat .low{color:var(--red);font-weight:700}
+.topic-stat .ok{color:var(--green);font-weight:700}
+.nav-q{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.nav-q button{width:34px;height:34px;padding:0;font-size:.8rem;border-radius:8px;background:#e2e8f0;color:#334155;font-weight:700}
+.nav-q button.cur{background:var(--primary);color:#fff}
+.nav-q button.done{background:var(--green-bg);color:#15803d;border:1px solid #86efac}
+.nav-q button.wrongd{background:var(--red-bg);color:#991b1b;border:1px solid #fca5a5}
+@media(max-width:480px){
+  .card{padding:16px;border-radius:13px}
+  h1{font-size:1.3rem}
+  .q-text{font-size:1rem}
+  .opt{font-size:.92rem;padding:11px 12px}
+  button{padding:11px 15px;font-size:.95rem}
+}
+@media print{.btn-row,.nav-q{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- START SCREEN -->
+<section id="startScreen" class="card">
+  <h1>Introduction to Computers — History &amp; Evolution</h1>
+  <p class="sub">ICT · DIT Part-I · Week 1 · Document-Based MCQ Quiz</p>
+  <div>
+    <span class="badge">Language: English</span>
+    <span class="badge">70 Questions</span>
+    <span class="badge g">35 Easy</span>
+    <span class="badge a">25 Medium</span>
+    <span class="badge r">10 Hard</span>
+  </div>
+  <h2 style="margin-top:16px">Instructions</h2>
+  <ul class="ins">
+    <li>Each question has exactly <b>four options (A–D)</b> with one correct answer.</li>
+    <li>Feedback and explanation appear <b>immediately</b> after you select an option.</li>
+    <li>Once answered, a question is <b>locked</b> — you cannot change your score.</li>
+    <li>Use <b>Next / Previous</b> to move between questions. Your answers are preserved.</li>
+    <li>At the end you will see your score, grade, topic-wise analysis and recommendations.</li>
+    <li>The quiz works <b>completely offline</b> — no internet needed.</li>
+  </ul>
+  <button class="btn-primary" id="startBtn" style="width:100%;margin-top:8px">Start Quiz</button>
+</section>
+
+<!-- QUIZ SCREEN -->
+<section id="quizScreen" class="card hidden">
+  <div class="prog-meta">
+    <span id="qCounter">Question 1 of 70</span>
+    <span id="scoreLive">Score: 0</span>
+  </div>
+  <div class="prog-wrap"><div class="prog-bar" id="progBar"></div></div>
+  <div class="tag-row">
+    <span class="diff" id="diffTag">Easy</span>
+    <span class="topic" id="topicTag">Topic</span>
+  </div>
+  <div class="q-num" id="qNum">Question 1</div>
+  <div class="q-text" id="qText">Question text</div>
+  <div id="optionsWrap"></div>
+  <div id="feedbackWrap"></div>
+  <div class="btn-row">
+    <button class="btn-sec" id="prevBtn">← Previous</button>
+    <button class="btn-primary" id="nextBtn">Next →</button>
+  </div>
+  <div class="nav-q" id="navDots"></div>
+</section>
+
+<!-- RESULTS SCREEN -->
+<section id="resultScreen" class="card hidden">
+  <h1>Quiz Results</h1>
+  <p class="sub">Introduction to Computers — History &amp; Evolution</p>
+  <div class="grade" id="gradeBox">Grade</div>
+  <div class="res-grid">
+    <div class="res-box"><div class="n" id="rTotal">70</div><div class="l">Total</div></div>
+    <div class="res-box"><div class="n" id="rAttempted">0</div><div class="l">Attempted</div></div>
+    <div class="res-box"><div class="n" id="rCorrect">0</div><div class="l">Correct</div></div>
+    <div class="res-box"><div class="n" id="rWrong">0</div><div class="l">Incorrect</div></div>
+    <div class="res-box"><div class="n" id="rUnans">0</div><div class="l">Unanswered</div></div>
+    <div class="res-box"><div class="n" id="rPct">0%</div><div class="l">Percentage</div></div>
+  </div>
+  <div class="prog-wrap"><div class="prog-bar" id="resBar"></div></div>
+  <h2 style="margin-top:18px">Topic-wise Performance</h2>
+  <div id="topicStats"></div>
+  <h2 style="margin-top:18px">Recommendations</h2>
+  <div id="recWrap"></div>
+  <div class="btn-row">
+    <button class="btn-primary" id="restartBtn">Restart Quiz</button>
+    <button class="btn-sec" id="reviewBtn">Review Answers</button>
+  </div>
+</section>
+
+<!-- REVIEW SCREEN -->
+<section id="reviewScreen" class="card hidden">
+  <h1>Review Answers</h1>
+  <p class="sub">All questions with your answer, correct answer and explanation.</p>
+  <div id="reviewWrap"></div>
+  <div class="btn-row">
+    <button class="btn-sec" id="backToResults">← Back to Results</button>
+    <button class="btn-primary" id="restartBtn2">Restart Quiz</button>
+  </div>
+</section>
+
+</div>
+
+<script>
+/* ============================================================
+   DOCUMENT-GROUNDED MCQ DATA
+   Source: Week 1 Eng.pdf — Introduction to Computers:
+   History and Evolution of Computers (DIT Part-I)
+   Every question is directly supported by that document.
+   ============================================================ */
+const QUIZ_DATA = [
+/* ---------- EASY (35) ---------- */
+{id:1,difficulty:"Easy",topic:"Computer Definition",
+ q:"According to the source, what does a computer do with data?",
+ o:["Accepts data as input, processes it, and produces meaningful information as output",
+    "Only stores data permanently",
+    "Only displays information without processing",
+    "Only connects to the internet"],
+ a:0,
+ e:"A computer accepts data as input, processes it according to stored instructions, produces meaningful information as output, and can store data for future use."},
+
+{id:2,difficulty:"Easy",topic:"CPU",
+ q:"What does CPU stand for?",
+ o:["Computer Personal Unit","Central Program Utility","Central Processing Unit","Control Processing Unit"],
+ a:2,
+ e:"CPU stands for Central Processing Unit — the 'brain' of the computer that executes instructions and processes data."},
+
+{id:3,difficulty:"Easy",topic:"Accuracy / GIGO",
+ q:"Which principle states that incorrect input leads to incorrect output?",
+ o:["Moore's Law","IPO Cycle","GUI","GIGO"],
+ a:3,
+ e:"GIGO stands for Garbage In, Garbage Out — the accuracy of output depends on correct input data and instructions."},
+
+{id:4,difficulty:"Easy",topic:"Early Devices",
+ q:"Which is considered the earliest known calculating device?",
+ o:["Abacus","Pascaline","Analytical Engine","Napier's Bones"],
+ a:0,
+ e:"The Abacus (~2400 BC, Babylon/China) is considered the earliest known calculating device; it used beads on rods for addition and subtraction."},
+
+{id:5,difficulty:"Easy",topic:"Early Devices",
+ q:"Who invented Napier's Bones?",
+ o:["Blaise Pascal","John Napier","Charles Babbage","Gottfried Leibniz"],
+ a:1,
+ e:"Napier's Bones (1617) was invented by John Napier — a manual calculating tool using numbered rods for multiplication and division through addition."},
+
+{id:6,difficulty:"Easy",topic:"Early Devices",
+ q:"Who built the Pascaline?",
+ o:["Blaise Pascal","John Napier","Herman Hollerith","Joseph Marie Jacquard"],
+ a:0,
+ e:"The Pascaline (1642) was built by Blaise Pascal — the first mechanical calculator, capable of addition and subtraction using gears and wheels."},
+
+{id:7,difficulty:"Easy",topic:"Father of Computer",
+ q:"Who is regarded as the 'Father of the Computer'?",
+ o:["Ada Lovelace","John Napier","Herman Hollerith","Charles Babbage"],
+ a:3,
+ e:"Charles Babbage is called the 'Father of the Computer' because his Analytical Engine had all the essential parts of a modern computer: input, memory, processing unit and output."},
+
+{id:8,difficulty:"Easy",topic:"First Programmer",
+ q:"Who is considered the first programmer?",
+ o:["Charles Babbage","Ada Lovelace","Blaise Pascal","Gottfried Leibniz"],
+ a:1,
+ e:"Ada Lovelace wrote the first algorithm for the Analytical Engine and is considered the world's first computer programmer."},
+
+{id:9,difficulty:"Easy",topic:"First Generation",
+ q:"Which technology was used in first-generation computers?",
+ o:["Transistors","Integrated Circuits","Vacuum Tubes","Microprocessors"],
+ a:2,
+ e:"First-generation computers (1940–1956) used vacuum tubes as the primary switching and amplifying component, with magnetic drums for memory."},
+
+{id:10,difficulty:"Easy",topic:"Second Generation",
+ q:"What replaced vacuum tubes in second-generation computers?",
+ o:["Integrated Circuits","Transistors","Microprocessors","Artificial Intelligence"],
+ a:1,
+ e:"Transistors (invented at Bell Labs, 1947) replaced vacuum tubes in second-generation computers (1956–1963)."},
+
+{id:11,difficulty:"Easy",topic:"Transistor",
+ q:"In which year was the transistor invented?",
+ o:["1956","1947","1940","1958"],
+ a:1,
+ e:"The transistor was invented at Bell Labs in 1947."},
+
+{id:12,difficulty:"Easy",topic:"Third Generation",
+ q:"What does IC stand for?",
+ o:["Internal Computer","Integrated Circuit","Intel Chip","Input Control"],
+ a:1,
+ e:"IC stands for Integrated Circuit — a small chip (silicon wafer) containing many transistors and electronic components."},
+
+{id:13,difficulty:"Easy",topic:"Fourth Generation",
+ q:"What was the first commercial microprocessor?",
+ o:["Intel 8086","PDP-8","IBM PC","Intel 4004"],
+ a:3,
+ e:"The Intel 4004 (1971) was the first commercial microprocessor."},
+
+{id:14,difficulty:"Easy",topic:"Fourth Generation",
+ q:"When was the Intel 4004 launched?",
+ o:["1964","1971","1981","1958"],
+ a:1,
+ e:"The Intel 4004 microprocessor was launched in 1971."},
+
+{id:15,difficulty:"Easy",topic:"GUI",
+ q:"What does GUI stand for?",
+ o:["Graphical User Interface","General User Interface","Graphical Utility Interface","General Utility Integration"],
+ a:0,
+ e:"GUI stands for Graphical User Interface — a visual way of interacting using icons, windows and a mouse instead of typed commands."},
+
+{id:16,difficulty:"Easy",topic:"Fourth Generation",
+ q:"In which year was the IBM Personal Computer launched?",
+ o:["1971","1984","1981","1991"],
+ a:2,
+ e:"The IBM Personal Computer (PC) was launched in 1981, standardizing personal computing."},
+
+{id:17,difficulty:"Easy",topic:"ENIAC",
+ q:"In which year was ENIAC built?",
+ o:["1951","1946","1940","1956"],
+ a:1,
+ e:"ENIAC (Electronic Numerical Integrator and Computer) was built in 1946 — the first general-purpose electronic computer."},
+
+{id:18,difficulty:"Easy",topic:"ENIAC",
+ q:"What does ENIAC stand for?",
+ o:["Electronic Numerical Integrated Analyzer and Computer","Electronic Numerical Integrator and Computer","Electronic Network Integrator and Calculator","Electrical Numerical Integrator and Calculator"],
+ a:1,
+ e:"ENIAC stands for Electronic Numerical Integrator and Computer."},
+
+{id:19,difficulty:"Easy",topic:"Fifth Generation",
+ q:"Which technology is the focus of fifth-generation computers?",
+ o:["Vacuum Tubes","Transistors","Integrated Circuits","Artificial Intelligence"],
+ a:3,
+ e:"Fifth-generation computing (2010–present) focuses on Artificial Intelligence (AI), Machine Learning, NLP and related technologies."},
+
+{id:20,difficulty:"Easy",topic:"Moore's Law",
+ q:"What does Moore's Law state?",
+ o:["Computers double in speed every year","The number of transistors on a microchip doubles approximately every two years","The cost of computers doubles every two years","Computer size doubles every two years"],
+ a:1,
+ e:"Moore's Law (Gordon Moore, 1965) observes that the number of transistors on a microchip doubles approximately every two years, while cost decreases."},
+
+{id:21,difficulty:"Easy",topic:"Hardware",
+ q:"What is hardware?",
+ o:["The set of instructions that tell the computer what to do","The physical, tangible components of a computer","The brain of the computer","A type of software"],
+ a:1,
+ e:"Hardware refers to the physical, tangible components of a computer such as CPU, monitor and keyboard."},
+
+{id:22,difficulty:"Easy",topic:"Software",
+ q:"What is software?",
+ o:["The physical components of a computer","The monitor and keyboard","The set of instructions that tell hardware what to do","A type of computer chip"],
+ a:2,
+ e:"Software is the set of instructions (programs) that tell hardware what to do."},
+
+{id:23,difficulty:"Easy",topic:"Early Devices",
+ q:"Which device used punched cards to control weaving patterns?",
+ o:["Pascaline","Jacquard's Loom","Analytical Engine","Tabulating Machine"],
+ a:1,
+ e:"Jacquard's Loom (1801, Joseph Marie Jacquard) used punched cards to control weaving patterns, introducing the concept of programmable machines and punched-card input."},
+
+{id:24,difficulty:"Easy",topic:"Abacus",
+ q:"Around which year was the Abacus used in Babylon?",
+ o:["1617","~2400 BC","1642","1801"],
+ a:1,
+ e:"The Abacus was used around 2400 BC in Babylon/China for calculations."},
+
+{id:25,difficulty:"Easy",topic:"Early Devices",
+ q:"Which device was used to tabulate the US Census data?",
+ o:["Analytical Engine","Tabulating Machine","Difference Engine","Pascaline"],
+ a:1,
+ e:"The Tabulating Machine (1890, Herman Hollerith) used punched cards to tabulate US Census data; Hollerith's company later became part of IBM."},
+
+{id:26,difficulty:"Easy",topic:"Early Devices",
+ q:"Who invented the Tabulating Machine?",
+ o:["Charles Babbage","Blaise Pascal","John Napier","Herman Hollerith"],
+ a:3,
+ e:"Herman Hollerith invented the Tabulating Machine (1890) for US Census data processing."},
+
+{id:27,difficulty:"Easy",topic:"First Generation",
+ q:"What programming language did first-generation computers use?",
+ o:["Assembly language","COBOL","Machine language","Python"],
+ a:2,
+ e:"First-generation computers used machine language (binary code, 0s and 1s)."},
+
+{id:28,difficulty:"Easy",topic:"First Generation",
+ q:"What input/output method did first-generation computers use?",
+ o:["Keyboards and monitors","Punched cards and paper tape","Voice and touch","Mouse and GUI"],
+ a:1,
+ e:"First-generation computers used punched cards and paper tape for input/output."},
+
+{id:29,difficulty:"Easy",topic:"ENIAC",
+ q:"Approximately how much did ENIAC weigh?",
+ o:["3 tons","30 tons","300 tons","18 tons"],
+ a:1,
+ e:"ENIAC weighed about 30 tons, occupied 1,800 square feet, and used around 18,000 vacuum tubes."},
+
+{id:30,difficulty:"Easy",topic:"ENIAC",
+ q:"Approximately how many vacuum tubes did ENIAC use?",
+ o:["1,800","180,000","18,000","180"],
+ a:2,
+ e:"ENIAC used around 18,000 vacuum tubes."},
+
+{id:31,difficulty:"Easy",topic:"Internet Milestones",
+ q:"In which year was the World Wide Web made publicly available?",
+ o:["1984","1991","2007","1981"],
+ a:1,
+ e:"The World Wide Web was made publicly available in 1991."},
+
+{id:32,difficulty:"Easy",topic:"Personal Computing",
+ q:"Which device redefined personal computing in 2007?",
+ o:["IBM PC","Apple Macintosh","iPhone","Intel 4004"],
+ a:2,
+ e:"Smartphones (iPhone, 2007) redefined personal computing."},
+
+{id:33,difficulty:"Easy",topic:"Third Generation",
+ q:"Which generation introduced operating systems?",
+ o:["First","Second","Fourth","Third"],
+ a:3,
+ e:"Operating Systems were introduced in the third generation (1964–1971)."},
+
+{id:34,difficulty:"Easy",topic:"Artificial Intelligence",
+ q:"What does AI stand for?",
+ o:["Automatic Intelligence","Artificial Intelligence","Advanced Integration","Applied Informatics"],
+ a:1,
+ e:"AI stands for Artificial Intelligence — the branch of computing focused on building systems that perform tasks requiring human intelligence."},
+
+{id:35,difficulty:"Easy",topic:"Characteristics",
+ q:"Which characteristic of a computer allows it to perform millions to billions of calculations per second?",
+ o:["Accuracy","Diligence","Speed","Storage"],
+ a:2,
+ e:"Speed is measured in MIPS/FLOPs — computers perform millions to billions of calculations per second."},
+
+/* ---------- MEDIUM (25) ---------- */
+{id:36,difficulty:"Medium",topic:"Third Generation",
+ q:"Which generation introduced keyboards and monitors?",
+ o:["First","Second","Fourth","Third"],
+ a:3,
+ e:"Keyboards and monitors were introduced in the third generation (1964–1971)."},
+
+{id:37,difficulty:"Medium",topic:"Third Generation",
+ q:"Which generation of computers was desk-sized?",
+ o:["First","Second","Fourth","Third"],
+ a:3,
+ e:"Third-generation computers (1964–1971) were desk-sized — considerably smaller than earlier generations."},
+
+{id:38,difficulty:"Medium",topic:"First Generation",
+ q:"Which generation of computers operated at millisecond speed?",
+ o:["Second","First","Third","Fourth"],
+ a:1,
+ e:"First-generation computers operated at millisecond speed — very slow compared to later generations."},
+
+{id:39,difficulty:"Medium",topic:"First Generation",
+ q:"Which generation used magnetic drums for memory?",
+ o:["Second","First","Third","Fourth"],
+ a:1,
+ e:"First-generation computers used vacuum tubes and magnetic drums for memory."},
+
+{id:40,difficulty:"Medium",topic:"IPO Cycle",
+ q:"What does the IPO cycle stand for?",
+ o:["Input-Program-Output","Input-Process-Output","Internal-Process-Output","Input-Process-Operation"],
+ a:1,
+ e:"The IPO cycle is Input-Process-Output, extended with Storage — the functional cycle of a computer."},
+
+{id:41,difficulty:"Medium",topic:"Second Generation",
+ q:"Which generation first used assembly language?",
+ o:["First","Second","Third","Fourth"],
+ a:1,
+ e:"Second-generation computers used assembly language and early high-level languages (COBOL, FORTRAN)."},
+
+{id:42,difficulty:"Medium",topic:"Early Devices",
+ q:"Which is the correct chronological order of these early devices?",
+ o:["Pascaline, Abacus, Tabulating Machine, Analytical Engine","Abacus, Pascaline, Analytical Engine, Tabulating Machine","Analytical Engine, Abacus, Pascaline, Tabulating Machine","Tabulating Machine, Pascaline, Abacus, Analytical Engine"],
+ a:1,
+ e:"Chronological order: Abacus (~2400 BC) → Pascaline (1642) → Analytical Engine (1837) → Tabulating Machine (1890)."},
+
+{id:43,difficulty:"Medium",topic:"Father of Computer",
+ q:"Why is Charles Babbage called the 'Father of the Computer'?",
+ o:["He invented the first electronic computer","He built the first microprocessor","He wrote the first computer program","His Analytical Engine had all essential parts of a modern computer"],
+ a:3,
+ e:"Babbage is called the Father of the Computer because his Analytical Engine had input, memory (store), a processing unit (mill) and output."},
+
+{id:44,difficulty:"Medium",topic:"Analytical Engine",
+ q:"Which computing device was never fully built?",
+ o:["Difference Engine","Analytical Engine","Pascaline","Tabulating Machine"],
+ a:1,
+ e:"The Analytical Engine (1837, Charles Babbage) was never fully built, but conceptually it was the ancestor of the modern computer."},
+
+{id:45,difficulty:"Medium",topic:"Second Generation",
+ q:"Which generation improved reliability significantly compared to the first generation?",
+ o:["Third","Second","Fourth","Fifth"],
+ a:1,
+ e:"Second-generation computers (transistors) improved reliability significantly over first-generation vacuum tube computers."},
+
+{id:46,difficulty:"Medium",topic:"Third Generation",
+ q:"Which generation introduced multitasking?",
+ o:["First","Second","Third","Fifth"],
+ a:2,
+ e:"Multitasking became possible in the third generation (1964–1971) due to integrated circuits and operating systems."},
+
+{id:47,difficulty:"Medium",topic:"Fourth Generation",
+ q:"What technology enabled the creation of personal computers?",
+ o:["Vacuum Tubes","Transistors","Magnetic Drums","Microprocessor"],
+ a:3,
+ e:"The microprocessor (Intel 4004, 1971) enabled personal computers — a single chip containing an entire CPU."},
+
+{id:48,difficulty:"Medium",topic:"Second Generation",
+ q:"Which generation used magnetic tape for input/output?",
+ o:["First","Second","Third","Fourth"],
+ a:1,
+ e:"Second-generation computers used punched cards and magnetic tape for input/output."},
+
+{id:49,difficulty:"Medium",topic:"Accuracy / GIGO",
+ q:"The GIGO principle is most closely related to which characteristic of computers?",
+ o:["Speed","Diligence","Accuracy","Storage"],
+ a:2,
+ e:"Accuracy: computers produce error-free results provided input data and instructions are correct — the GIGO principle."},
+
+{id:50,difficulty:"Medium",topic:"Characteristics",
+ q:"Which characteristic allows a computer to perform repetitive tasks continuously without fatigue?",
+ o:["Speed","Accuracy","Diligence","Intelligence"],
+ a:2,
+ e:"Diligence: a computer can perform repetitive tasks continuously without fatigue, boredom or loss of accuracy."},
+
+{id:51,difficulty:"Medium",topic:"Speed Measurement",
+ q:"Which measurement is used for computer speed according to the source?",
+ o:["MB/GB","MIPS/FLOPs","GHz only","Pixels"],
+ a:1,
+ e:"Speed is measured in MIPS/FLOPs — millions to billions of calculations per second."},
+
+{id:52,difficulty:"Medium",topic:"Fourth Generation",
+ q:"Which generation introduced the Graphical User Interface (GUI)?",
+ o:["Second","Third","Fourth","Fifth"],
+ a:2,
+ e:"GUI emerged in the fourth generation (1971–2010); Apple Macintosh (1984) popularized it."},
+
+{id:53,difficulty:"Medium",topic:"First Generation",
+ q:"What was the speed of first-generation computers?",
+ o:["Nanoseconds","Microseconds","Milliseconds","Picoseconds"],
+ a:2,
+ e:"First-generation computers operated at millisecond speed — the slowest among the five generations."},
+
+{id:54,difficulty:"Medium",topic:"Second Generation",
+ q:"Which programming languages were used in second-generation computers?",
+ o:["Machine language only","Python, TensorFlow","C, C++, Java","Assembly language, COBOL, FORTRAN"],
+ a:3,
+ e:"Second-generation computers used assembly language and early high-level languages such as COBOL and FORTRAN."},
+
+{id:55,difficulty:"Medium",topic:"Generations Overview",
+ q:"Which sequence correctly represents the five generations of computers?",
+ o:["Transistors → Vacuum Tubes → Microprocessors → ICs → AI","Vacuum Tubes → Transistors → ICs → Microprocessors → AI","ICs → Vacuum Tubes → Transistors → AI → Microprocessors","AI → Microprocessors → ICs → Transistors → Vacuum Tubes"],
+ a:1,
+ e:"The five generations: Vacuum Tubes (1st) → Transistors (2nd) → Integrated Circuits (3rd) → Microprocessors (4th) → AI (5th)."},
+
+{id:56,difficulty:"Medium",topic:"Third Generation",
+ q:"Which generation introduced high-level languages like FORTRAN, BASIC, and COBOL?",
+ o:["First","Second","Fourth","Third"],
+ a:3,
+ e:"Third-generation computers used high-level languages (FORTRAN, BASIC, COBOL) and introduced operating systems."},
+
+{id:57,difficulty:"Medium",topic:"Fifth Generation",
+ q:"What types of input does fifth-generation computing support?",
+ o:["Only keyboard and mouse","Voice, touch, gesture, biometric","Only punched cards","Only paper tape"],
+ a:1,
+ e:"Fifth-generation computing supports voice, touch, gesture and biometric input, with AI-generated multimedia output."},
+
+{id:58,difficulty:"Medium",topic:"Fourth Generation",
+ q:"Which milestone occurred in 1984?",
+ o:["IBM PC launched","Intel 4004 launched","World Wide Web launched","Apple Macintosh introduced GUI"],
+ a:3,
+ e:"In 1984, Apple Macintosh popularized the Graphical User Interface (GUI) and mouse to the mass market."},
+
+{id:59,difficulty:"Medium",topic:"Fifth Generation",
+ q:"Which generation uses parallel processing?",
+ o:["First","Fifth","Third","Fourth"],
+ a:1,
+ e:"Fifth-generation computing uses AI, ML, NLP, quantum computing (emerging) and parallel processing."},
+
+{id:60,difficulty:"Medium",topic:"Early Devices",
+ q:"What is the main difference between the Pascaline and the Stepped Reckoner?",
+ o:["Pascaline could multiply, Stepped Reckoner could not","Pascaline was electronic, Stepped Reckoner was mechanical","There is no difference","Stepped Reckoner could perform multiplication and division as well"],
+ a:3,
+ e:"The Stepped Reckoner (1673, Gottfried Leibniz) improved Pascal's design and could perform multiplication and division as well."},
+
+/* ---------- HARD (10) ---------- */
+{id:61,difficulty:"Hard",topic:"Generation Matching",
+ q:"Which combination correctly matches a generation with its core technology?",
+ o:["Third Generation - Vacuum Tubes","Fourth Generation - Microprocessor","Second Generation - Integrated Circuits","First Generation - Transistors"],
+ a:1,
+ e:"Fourth Generation (1971–2010) = Microprocessor. First = Vacuum Tubes; Second = Transistors; Third = ICs."},
+
+{id:62,difficulty:"Hard",topic:"Accuracy / GIGO",
+ q:"According to the GIGO principle, if a computer produces incorrect output despite correct processing, what is the likely cause?",
+ o:["The CPU is faulty","The input data or instructions were incorrect","The monitor is malfunctioning","The storage device is full"],
+ a:1,
+ e:"GIGO (Garbage In, Garbage Out): output accuracy depends on input data and instructions being correct."},
+
+{id:63,difficulty:"Hard",topic:"Speed Comparison",
+ q:"Which sequence correctly orders the generations by speed from slowest to fastest?",
+ o:["Picoseconds → Nanoseconds → Microseconds → Milliseconds","Milliseconds → Microseconds → Nanoseconds → Picoseconds","Microseconds → Milliseconds → Picoseconds → Nanoseconds","Nanoseconds → Picoseconds → Milliseconds → Microseconds"],
+ a:1,
+ e:"Speed order: 1st = milliseconds, 2nd = microseconds, 3rd = nanoseconds, 4th = picoseconds."},
+
+{id:64,difficulty:"Hard",topic:"Inventors",
+ q:"Which of the following correctly pairs an inventor with their invention?",
+ o:["Blaise Pascal - Stepped Reckoner","Gottfried Leibniz - Stepped Reckoner","John Napier - Pascaline","Herman Hollerith - Analytical Engine"],
+ a:1,
+ e:"Gottfried Leibniz invented the Stepped Reckoner (1673). Pascal built the Pascaline; Napier invented Napier's Bones; Hollerith built the Tabulating Machine."},
+
+{id:65,difficulty:"Hard",topic:"Analytical Engine",
+ q:"What common feature did the Analytical Engine share with modern computers?",
+ o:["It used microprocessors","It used AI","It had input, memory, a processing unit, and output","It was portable"],
+ a:2,
+ e:"The Analytical Engine had all essential parts of a modern computer: input, memory (store), a processing unit (mill) and output."},
+
+{id:66,difficulty:"Hard",topic:"Generation Transition",
+ q:"Which generation transition involved replacing vacuum tubes with transistors?",
+ o:["Second to Third","First to Second","Third to Fourth","Fourth to Fifth"],
+ a:1,
+ e:"The transition from first to second generation replaced vacuum tubes with transistors."},
+
+{id:67,difficulty:"Hard",topic:"Fifth Generation",
+ q:"Which statement about fifth-generation computing is supported by the source?",
+ o:["It relies primarily on vacuum tubes","It uses GPUs/TPUs to accelerate AI workloads","It uses punched cards for input","It operates at millisecond speed"],
+ a:1,
+ e:"Fifth-generation computing uses GPUs/TPUs to accelerate AI workloads, with enormous parallel processing power."},
+
+{id:68,difficulty:"Hard",topic:"Size Comparison",
+ q:"What is the correct order of computer size from largest to smallest across generations?",
+ o:["Compact/Cloud → Desktop/Laptop → Desk-sized → Large cabinet → Room-sized","Room-sized → Large cabinet → Desk-sized → Desktop/Laptop → Compact/Cloud","Desk-sized → Room-sized → Large cabinet → Compact/Cloud → Desktop/Laptop","Large cabinet → Room-sized → Desktop/Laptop → Desk-sized → Compact/Cloud"],
+ a:1,
+ e:"Size trend: 1st room-sized → 2nd large cabinet → 3rd desk-sized → 4th desktop/laptop → 5th compact/cloud-based."},
+
+{id:69,difficulty:"Hard",topic:"Early Devices",
+ q:"Which device introduced the concept of punched-card input?",
+ o:["Pascaline","Jacquard's Loom","Difference Engine","Abacus"],
+ a:1,
+ e:"Jacquard's Loom (1801) used punched cards to control weaving patterns and introduced the concept of programmable machines and punched-card input."},
+
+{id:70,difficulty:"Hard",topic:"Third Generation",
+ q:"Which generation's defining technology is silicon chips?",
+ o:["First","Second","Fourth","Third"],
+ a:3,
+ e:"Third-generation computers used Integrated Circuits (ICs), also called silicon chips."}
+];
+
+/* ============================================================
+   QUIZ ENGINE
+   ============================================================ */
+const TOTAL = QUIZ_DATA.length;
+let current = 0;
+let answers = new Array(TOTAL).fill(null); // {selected, correct}
+
+const el = id => document.getElementById(id);
+const startScreen = el("startScreen"), quizScreen = el("quizScreen"),
+      resultScreen = el("resultScreen"), reviewScreen = el("reviewScreen");
+
+function show(screen){
+  [startScreen,quizScreen,resultScreen,reviewScreen].forEach(s=>s.classList.add("hidden"));
+  screen.classList.remove("hidden");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* ---------- Start ---------- */
+el("startBtn").addEventListener("click",()=>{
+  current=0; answers=new Array(TOTAL).fill(null);
+  renderQuestion(); show(quizScreen);
+});
+
+/* ---------- Render current question ---------- */
+function renderQuestion(){
+  const q = QUIZ_DATA[current];
+  const ans = answers[current];
+
+  el("qCounter").textContent = `Question ${current+1} of ${TOTAL}`;
+  el("qNum").textContent = `Question ${current+1}`;
+  el("qText").textContent = q.q;
+  el("diffTag").textContent = q.difficulty;
+  el("diffTag").className = "diff " + q.difficulty;
+  el("topicTag").textContent = "Topic: " + q.topic;
+
+  // progress
+  const attempted = answers.filter(a=>a!==null).length;
+  el("progBar").style.width = ((current+1)/TOTAL*100) + "%";
+  el("scoreLive").textContent = `Score: ${answers.filter(a=>a&&a.correct).length}`;
+
+  // options
+  const wrap = el("optionsWrap");
+  wrap.innerHTML = "";
+  const letters = ["A","B","C","D"];
+  q.o.forEach((opt,i)=>{
+    const btn = document.createElement("button");
+    btn.className = "opt";
+    btn.type = "button";
+    btn.setAttribute("data-index",i);
+    btn.innerHTML = `<span class="ltr">${letters[i]}.</span>${opt}`;
+    if(ans){
+      btn.classList.add("locked");
+      if(i===q.a) btn.classList.add("correct");
+      if(i===ans.selected && !ans.correct) btn.classList.add("wrong");
+      btn.disabled = true;
+    } else {
+      btn.addEventListener("click",()=>selectAnswer(i,btn));
+    }
+    wrap.appendChild(btn);
+  });
+
+  // feedback
+  const fbWrap = el("feedbackWrap");
+  fbWrap.innerHTML = "";
+  if(ans){
+    const ok = ans.correct;
+    const div = document.createElement("div");
+    div.className = "fb " + (ok?"ok":"no");
+    div.setAttribute("role","status");
+    div.innerHTML = `<div class="fb-title">${ok?"✔ Correct!":"✘ Incorrect!"}</div>
+      <div>Correct answer: <b>${letters[q.a]}. ${q.o[q.a]}</b></div>
+      <div class="exp"><b>Explanation:</b> ${q.e}</div>`;
+    fbWrap.appendChild(div);
+  }
+
+  // nav buttons
+  el("prevBtn").disabled = current===0;
+  el("nextBtn").textContent = current===TOTAL-1 ? "Finish ✓" : "Next →";
+
+  renderNavDots();
+}
+
+/* ---------- Answer selection ---------- */
+function selectAnswer(idx, btn){
+  const q = QUIZ_DATA[current];
+  if(answers[current]) return; // already answered
+  const correct = idx === q.a;
+  answers[current] = {selected:idx, correct:correct};
+
+  // lock all options
+  const opts = el("optionsWrap").querySelectorAll(".opt");
+  opts.forEach((b,i)=>{
+    b.classList.add("locked");
+    b.disabled = true;
+    if(i===q.a) b.classList.add("correct");
+    if(i===idx && !correct) b.classList.add("wrong");
+  });
+
+  // feedback
+  const letters=["A","B","C","D"];
+  const fbWrap = el("feedbackWrap");
+  fbWrap.innerHTML="";
+  const div = document.createElement("div");
+  div.className = "fb " + (correct?"ok":"no");
+  div.setAttribute("role","status");
+  div.innerHTML = `<div class="fb-title">${correct?"✔ Correct!":"✘ Incorrect!"}</div>
+    <div>Correct answer: <b>${letters[q.a]}. ${q.o[q.a]}</b></div>
+    <div class="exp"><b>Explanation:</b> ${q.e}</div>`;
+  fbWrap.appendChild(div);
+
+  el("scoreLive").textContent = `Score: ${answers.filter(a=>a&&a.correct).length}`;
+  renderNavDots();
+}
+
+/* ---------- Navigation ---------- */
+el("prevBtn").addEventListener("click",()=>{ if(current>0){current--;renderQuestion();} });
+el("nextBtn").addEventListener("click",()=>{
+  if(current<TOTAL-1){ current++; renderQuestion(); }
+  else { showResults(); }
+});
+
+function renderNavDots(){
+  const nav = el("navDots");
+  nav.innerHTML="";
+  QUIZ_DATA.forEach((q,i)=>{
+    const b=document.createElement("button");
+    b.type="button";
+    b.textContent=i+1;
+    if(i===current) b.classList.add("cur");
+    const a=answers[i];
+    if(a){ b.classList.add(a.correct?"done":"wrongd"); }
+    b.addEventListener("click",()=>{ current=i; renderQuestion(); });
+    b.setAttribute("aria-label",`Go to question ${i+1}`);
+    nav.appendChild(b);
+  });
+}
+
+/* ---------- Results ---------- */
+function showResults(){
+  const attempted = answers.filter(a=>a!==null).length;
+  const correct = answers.filter(a=>a&&a.correct).length;
+  const wrong = answers.filter(a=>a&&!a.correct).length;
+  const unanswered = TOTAL - attempted;
+  const pct = Math.round(correct/TOTAL*100);
+
+  el("rTotal").textContent = TOTAL;
+  el("rAttempted").textContent = attempted;
+  el("rCorrect").textContent = correct;
+  el("rWrong").textContent = wrong;
+  el("rUnans").textContent = unanswered;
+  el("rPct").textContent = pct + "%";
+  el("resBar").style.width = pct + "%";
+
+  // grade
+  const g = el("gradeBox");
+  let cls, txt;
+  if(pct>=90){cls="excellent";txt="Excellent — Outstanding performance!";}
+  else if(pct>=80){cls="verygood";txt="Very Good — Strong understanding!";}
+  else if(pct>=70){cls="good";txt="Good — Solid grasp of the material.";}
+  else if(pct>=60){cls="improve";txt="Needs Improvement — Review weak areas.";}
+  else {cls="practice";txt="More Practice Recommended — Revisit the source.";}
+  g.className = "grade " + cls;
+  g.textContent = `${txt} (${pct}%)`;
+
+  // topic stats
+  const topicMap = {};
+  QUIZ_DATA.forEach((q,i)=>{
+    if(!topicMap[q.topic]) topicMap[q.topic]={total:0,correct:0};
+    topicMap[q.topic].total++;
+    if(answers[i] && answers[i].correct) topicMap[q.topic].correct++;
+  });
+  const ts = el("topicStats");
+  ts.innerHTML="";
+  Object.keys(topicMap).sort().forEach(t=>{
+    const s=topicMap[t];
+    const row=document.createElement("div");
+    row.className="topic-stat";
+    const p = Math.round(s.correct/s.total*100);
+    row.innerHTML=`<span>${t}</span><span class="${p>=60?'ok':'low'}">${s.correct}/${s.total} (${p}%)</span>`;
+    ts.appendChild(row);
+  });
+
+  // recommendations
+  const rec = el("recWrap");
+  rec.innerHTML="";
+  const add = html => { const d=document.createElement("div"); d.className="rec"; d.innerHTML=html; rec.appendChild(d); };
+
+  if(pct>=90){
+    add("<b>Overall:</b> Excellent work! You have a strong command of the history and evolution of computers.");
+    add("<b>Next step:</b> Explore the Fifth Generation (AI, ML, quantum computing) in more depth using the same source.");
+  } else if(pct>=80){
+    add("<b>Overall:</b> Very good performance. You understand most concepts clearly.");
+    add("<b>Study advice:</b> Re-read the comparative summary of all five generations to sharpen comparisons.");
+  } else if(pct>=70){
+    add("<b>Overall:</b> Good effort. You have a solid grasp but some details need reinforcement.");
+    add("<b>Study advice:</b> Focus on the speed, size and technology columns of the generation comparison table.");
+  } else if(pct>=60){
+    add("<b>Overall:</b> Needs improvement. Review the weak topics listed above.");
+    add("<b>Study advice:</b> Revisit the source sections on early calculating devices and the five generations.");
+  } else {
+    add("<b>Overall:</b> More practice recommended. Do not be discouraged — review the source carefully.");
+    add("<b>Study advice:</b> Start with the definitions (computer, IPO cycle, generations) and the timeline of milestones.");
+  }
+
+  // weakest topics
+  const weak = Object.keys(topicMap).filter(t=>{
+    const s=topicMap[t]; return s.correct/s.total < 0.6;
+  });
+  if(weak.length){
+    add("<b>Review these topics:</b> " + weak.join(", "));
+  }
+  if(wrong>0){
+    add(`<b>Incorrect answers:</b> You missed ${wrong} question(s). Use the <i>Review Answers</i> button to study the explanations.`);
+  }
+  if(unanswered>0){
+    add(`<b>Unanswered:</b> ${unanswered} question(s) were left blank. Try to attempt every question next time.`);
+  }
+  add("<b>Recommended next step:</b> Restart the quiz and aim for a higher score, or review the source document sections covering weak topics.");
+
+  show(resultScreen);
+}
+
+/* ---------- Review ---------- */
+el("reviewBtn").addEventListener("click",()=>{
+  const wrap = el("reviewWrap");
+  wrap.innerHTML="";
+  const letters=["A","B","C","D"];
+  QUIZ_DATA.forEach((q,i)=>{
+    const a=answers[i];
+    const div=document.createElement("div");
+    div.className="card";
+    let status = a ? (a.correct?"✔ Correct":"✘ Incorrect") : "— Unanswered";
+    let color = a ? (a.correct?"#15803d":"#991b1b") : "#64748b";
+    let optsHtml = q.o.map((o,j)=>{
+      let mark="";
+      if(j===q.a) mark=" ✔ (correct)";
+      if(a && j===a.selected && !a.correct) mark=" ✘ (your answer)";
+      return `<div style="padding:4px 0">${letters[j]}. ${o}${mark}</div>`;
+    }).join("");
+    div.innerHTML = `<div class="q-num">Question ${i+1} · <span class="diff ${q.difficulty}">${q.difficulty}</span> · ${q.topic}</div>
+      <div class="q-text" style="font-size:1rem">${q.q}</div>
+      ${optsHtml}
+      <div class="fb ${a&&a.correct?'ok':'no'}" style="margin-top:8px">
+        <div class="fb-title" style="color:${color}">${status}</div>
+        <div class="exp"><b>Explanation:</b> ${q.e}</div>
+      </div>`;
+    wrap.appendChild(div);
+  });
+  show(reviewScreen);
+});
+
+el("backToResults").addEventListener("click",()=>show(resultScreen));
+
+/* ---------- Restart ---------- */
+function restart(){
+  current=0; answers=new Array(TOTAL).fill(null);
+  el("feedbackWrap").innerHTML="";
+  renderQuestion(); show(quizScreen);
+}
+el("restartBtn").addEventListener("click",restart);
+el("restartBtn2").addEventListener("click",restart);
+</script>
+</body>
+</html>

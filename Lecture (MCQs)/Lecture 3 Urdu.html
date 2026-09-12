@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>آئی سی ٹی کوئز — کمپیوٹر کی تاریخ اور ارتقا</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f4f7fb;--card:#ffffff;--text:#1e293b;--muted:#64748b;
+  --primary:#2563eb;--primary-dark:#1d4ed8;--border:#e2e8f0;
+  --green:#16a34a;--green-bg:#dcfce7;--red:#dc2626;--red-bg:#fee2e2;
+  --amber:#d97706;--shadow:0 4px 16px rgba(30,41,59,.08);
+}
+body{font-family:'Noto Nastaliq Urdu','Jameel Noori Nastaleeq','Segoe UI',Tahoma,sans-serif;
+  background:var(--bg);color:var(--text);line-height:2;min-height:100vh;padding:12px;direction:rtl}
+.wrap{max-width:860px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:22px;margin-bottom:16px}
+h1{font-size:1.5rem;color:var(--primary-dark);margin-bottom:6px;line-height:1.8}
+h2{font-size:1.2rem;margin-bottom:10px}
+.sub{color:var(--muted);font-size:.95rem;margin-bottom:14px}
+.badge{display:inline-block;background:#eff6ff;color:var(--primary-dark);border:1px solid #bfdbfe;border-radius:999px;padding:3px 12px;font-size:.8rem;font-weight:600;margin:3px 4px 3px 0}
+.badge.g{background:var(--green-bg);color:#15803d;border-color:#86efac}
+.badge.a{background:#fef3c7;color:#92400e;border-color:#fcd34d}
+.badge.r{background:var(--red-bg);color:#991b1b;border-color:#fca5a5}
+ul.ins{margin:10px 22px 16px 0;padding-right:8px}
+ul.ins li{margin-bottom:6px;font-size:.95rem}
+button{font-family:inherit;font-size:1rem;border:none;border-radius:10px;padding:12px 20px;cursor:pointer;font-weight:600;transition:background .15s,transform .1s}
+button:active{transform:scale(.98)}
+button:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-primary:disabled{background:#94a3b8;cursor:not-allowed}
+.btn-sec{background:#e2e8f0;color:#334155}
+.btn-sec:hover{background:#cbd5e1}
+.btn-sec:disabled{opacity:.45;cursor:not-allowed}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;margin-top:16px}
+.hidden{display:none!important}
+.prog-wrap{background:#e2e8f0;border-radius:999px;height:10px;overflow:hidden;margin:10px 0 4px}
+.prog-bar{height:100%;width:0;background:linear-gradient(270deg,#2563eb,#3b82f6);transition:width .3s}
+.prog-meta{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted);margin-bottom:12px}
+.q-num{font-size:.8rem;font-weight:700;color:var(--primary);margin-bottom:6px}
+.q-text{font-size:1.08rem;font-weight:600;margin-bottom:14px;line-height:2}
+.opt{display:block;width:100%;text-align:right;background:#f8fafc;border:2px solid var(--border);border-radius:11px;padding:12px 14px;margin-bottom:9px;cursor:pointer;font-size:.98rem;transition:border .15s,background .15s;color:var(--text);font-family:inherit;line-height:1.9}
+.opt:hover:not(.locked){border-color:#93c5fd;background:#eff6ff}
+.opt:focus-visible{outline:3px solid #93c5fd;outline-offset:1px}
+.opt .ltr{display:inline-block;font-weight:700;margin-left:8px;color:var(--primary-dark)}
+.opt.correct{background:var(--green-bg);border-color:var(--green)}
+.opt.correct .ltr{color:#15803d}
+.opt.wrong{background:var(--red-bg);border-color:var(--red)}
+.opt.wrong .ltr{color:#991b1b}
+.opt.locked{cursor:default}
+.fb{border-radius:11px;padding:12px 14px;margin-top:6px;font-size:.95rem;border:1px solid;line-height:1.9}
+.fb.ok{background:var(--green-bg);border-color:#86efac;color:#14532d}
+.fb.no{background:var(--red-bg);border-color:#fca5a5;color:#7f1d1d}
+.fb .fb-title{font-weight:700;margin-bottom:4px}
+.fb .exp{margin-top:6px;padding-top:6px;border-top:1px dashed rgba(0,0,0,.15);font-size:.9rem}
+.diff{font-size:.72rem;font-weight:700;padding:2px 9px;border-radius:999px}
+.diff.Easy{background:var(--green-bg);color:#15803d}
+.diff.Medium{background:#fef3c7;color:#92400e}
+.diff.Hard{background:var(--red-bg);color:#991b1b}
+.tag-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.topic{font-size:.78rem;color:var(--muted);font-weight:600}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:14px 0}
+.res-box{background:#f8fafc;border:1px solid var(--border);border-radius:11px;padding:12px;text-align:center}
+.res-box .n{font-size:1.5rem;font-weight:800;color:var(--primary-dark)}
+.res-box .l{font-size:.78rem;color:var(--muted);font-weight:600}
+.grade{text-align:center;padding:16px;border-radius:12px;margin:12px 0;font-weight:700;font-size:1.1rem}
+.grade.excellent{background:var(--green-bg);color:#14532d}
+.grade.verygood{background:#dbeafe;color:#1e40af}
+.grade.good{background:#e0f2fe;color:#075985}
+.grade.improve{background:#fef3c7;color:#92400e}
+.grade.practice{background:var(--red-bg);color:#7f1d1d}
+.rec{background:#f8fafc;border-right:4px solid var(--primary);border-radius:8px;padding:12px 14px;margin-bottom:10px;font-size:.93rem}
+.rec b{color:var(--primary-dark)}
+.topic-stat{display:flex;justify-content:space-between;font-size:.88rem;padding:5px 0;border-bottom:1px dashed var(--border)}
+.topic-stat:last-child{border-bottom:none}
+.topic-stat .low{color:var(--red);font-weight:700}
+.topic-stat .ok{color:var(--green);font-weight:700}
+.nav-q{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.nav-q button{width:34px;height:34px;padding:0;font-size:.8rem;border-radius:8px;background:#e2e8f0;color:#334155;font-weight:700}
+.nav-q button.cur{background:var(--primary);color:#fff}
+.nav-q button.done{background:var(--green-bg);color:#15803d;border:1px solid #86efac}
+.nav-q button.wrongd{background:var(--red-bg);color:#991b1b;border:1px solid #fca5a5}
+@media(max-width:480px){
+  .card{padding:16px;border-radius:13px}
+  h1{font-size:1.25rem}
+  .q-text{font-size:1rem}
+  .opt{font-size:.92rem;padding:11px 12px}
+  button{padding:11px 15px;font-size:.95rem}
+}
+@media print{.btn-row,.nav-q{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- اسٹارٹ اسکرین -->
+<section id="startScreen" class="card">
+  <h1>کمپیوٹر کا تعارف — تاریخ اور ارتقا</h1>
+  <p class="sub">آئی سی ٹی · ڈی آئی ٹی پارٹ-I · ہفتہ 1 · دستاویز پر مبنی MCQ کوئز</p>
+  <div>
+    <span class="badge">زبان: اردو</span>
+    <span class="badge">70 سوالات</span>
+    <span class="badge g">35 آسان</span>
+    <span class="badge a">25 درمیانہ</span>
+    <span class="badge r">10 مشکل</span>
+  </div>
+  <h2 style="margin-top:16px">ہدایات</h2>
+  <ul class="ins">
+    <li>ہر سوال میں <b>چار آپشن (A–D)</b> ہیں جن میں سے صرف ایک درست ہے۔</li>
+    <li>آپشن منتخب کرنے کے <b>فوراً بعد</b> فیڈبیک اور وضاحت ظاہر ہو جاتی ہے۔</li>
+    <li>ایک بار جواب دینے کے بعد سوال <b>لاک</b> ہو جاتا ہے — اسکور تبدیل نہیں ہو سکتا۔</li>
+    <li><b>اگلا / پچھلا</b> بٹن سے سوالات کے درمیان حرکت کریں۔ جوابات محفوظ رہتے ہیں۔</li>
+    <li>آخر میں اسکور، گریڈ، موضوع وار تجزیہ اور سفارشات دکھائی جائیں گی۔</li>
+    <li>یہ کوئز <b>مکمل طور پر آف لائن</b> کام کرتا ہے — انٹرنیٹ کی ضرورت نہیں۔</li>
+  </ul>
+  <button class="btn-primary" id="startBtn" style="width:100%;margin-top:8px">کوئز شروع کریں</button>
+</section>
+
+<!-- کوئز اسکرین -->
+<section id="quizScreen" class="card hidden">
+  <div class="prog-meta">
+    <span id="qCounter">سوال 1 از 70</span>
+    <span id="scoreLive">اسکور: 0</span>
+  </div>
+  <div class="prog-wrap"><div class="prog-bar" id="progBar"></div></div>
+  <div class="tag-row">
+    <span class="diff" id="diffTag">آسان</span>
+    <span class="topic" id="topicTag">موضوع</span>
+  </div>
+  <div class="q-num" id="qNum">سوال 1</div>
+  <div class="q-text" id="qText">سوال یہاں ظاہر ہوگا</div>
+  <div id="optionsWrap"></div>
+  <div id="feedbackWrap"></div>
+  <div class="btn-row">
+    <button class="btn-sec" id="prevBtn">→ پچھلا</button>
+    <button class="btn-primary" id="nextBtn">اگلا ←</button>
+  </div>
+  <div class="nav-q" id="navDots"></div>
+</section>
+
+<!-- نتائج اسکرین -->
+<section id="resultScreen" class="card hidden">
+  <h1>کوئز کے نتائج</h1>
+  <p class="sub">کمپیوٹر کا تعارف — تاریخ اور ارتقا</p>
+  <div class="grade" id="gradeBox">گریڈ</div>
+  <div class="res-grid">
+    <div class="res-box"><div class="n" id="rTotal">70</div><div class="l">کل سوالات</div></div>
+    <div class="res-box"><div class="n" id="rAttempted">0</div><div class="l">جواب دیے</div></div>
+    <div class="res-box"><div class="n" id="rCorrect">0</div><div class="l">درست</div></div>
+    <div class="res-box"><div class="n" id="rWrong">0</div><div class="l">غلط</div></div>
+    <div class="res-box"><div class="n" id="rUnans">0</div><div class="l">بغیر جواب</div></div>
+    <div class="res-box"><div class="n" id="rPct">0%</div><div class="l">فیصد</div></div>
+  </div>
+  <div class="prog-wrap"><div class="prog-bar" id="resBar"></div></div>
+  <h2 style="margin-top:18px">موضوع وار کارکردگی</h2>
+  <div id="topicStats"></div>
+  <h2 style="margin-top:18px">سفارشات</h2>
+  <div id="recWrap"></div>
+  <div class="btn-row">
+    <button class="btn-primary" id="restartBtn">کوئز دوبارہ شروع کریں</button>
+    <button class="btn-sec" id="reviewBtn">جوابات کا جائزہ</button>
+  </div>
+</section>
+
+<!-- جائزہ اسکرین -->
+<section id="reviewScreen" class="card hidden">
+  <h1>جوابات کا جائزہ</h1>
+  <p class="sub">تمام سوالات، آپ کے جواب، درست جواب اور وضاحت کے ساتھ۔</p>
+  <div id="reviewWrap"></div>
+  <div class="btn-row">
+    <button class="btn-sec" id="backToResults">→ نتائج پر واپس</button>
+    <button class="btn-primary" id="restartBtn2">کوئز دوبارہ شروع کریں</button>
+  </div>
+</section>
+
+</div>
+
+<script>
+/* ============================================================
+   دستاویز پر مبنی MCQ ڈیٹا
+   ماخذ: Week 1 Eng.pdf — Introduction to Computers:
+   History and Evolution of Computers (DIT Part-I)
+   ہر سوال براہ راست ماخذ دستاویز سے تصدیق شدہ ہے۔
+   ============================================================ */
+const QUIZ_DATA = [
+/* ---------- آسان (35) ---------- */
+{id:1,difficulty:"Easy",topic:"کمپیوٹر کی تعریف",
+ q:"ماخذ کے مطابق کمپیوٹر ڈیٹا کے ساتھ کیا کرتا ہے؟",
+ o:["ڈیٹا کو بطور ان پٹ قبول کرتا ہے، اسے پراسیس کرتا ہے اور بامعنی معلومات بطور آؤٹ پٹ پیش کرتا ہے",
+    "صرف ڈیٹا کو مستقل طور پر محفوظ کرتا ہے",
+    "بغیر پراسیس کیے صرف معلومات دکھاتا ہے",
+    "صرف انٹرنیٹ سے جڑتا ہے"],
+ a:0,
+ e:"کمپیوٹر ڈیٹا کو بطور ان پٹ قبول کرتا ہے، میموری میں محفوظ ہدایات کے مطابق اسے پراسیس کرتا ہے، بامعنی معلومات بطور آؤٹ پٹ پیش کرتا ہے اور مستقبل کے لیے ڈیٹا محفوظ رکھ سکتا ہے۔"},
+
+{id:2,difficulty:"Easy",topic:"CPU",
+ q:"CPU کا مکمل نام کیا ہے؟",
+ o:["Computer Personal Unit","Central Program Utility","Central Processing Unit","Control Processing Unit"],
+ a:2,
+ e:"CPU کا مطلب Central Processing Unit ہے — کمپیوٹر کا 'دماغ' جو ہدایات پر عمل کرتا ہے اور ڈیٹا پراسیس کرتا ہے۔"},
+
+{id:3,difficulty:"Easy",topic:"درستگی / GIGO",
+ q:"کون سا اصول کہتا ہے کہ غلط ان پٹ سے غلط آؤٹ پٹ ملتا ہے؟",
+ o:["Moore's Law","IPO Cycle","GUI","GIGO"],
+ a:3,
+ e:"GIGO کا مطلب Garbage In, Garbage Out ہے — آؤٹ پٹ کی درستگی کا انحصار درست ان پٹ ڈیٹا اور ہدایات پر ہے۔"},
+
+{id:4,difficulty:"Easy",topic:"ابتدائی آلات",
+ q:"قدیم ترین معلوم حسابی آلہ کون سا سمجھا جاتا ہے؟",
+ o:["Abacus","Pascaline","Analytical Engine","Napier's Bones"],
+ a:0,
+ e:"Abacus (~2400 قبل مسیح، بابل/چین) قدیم ترین معلوم حسابی آلہ ہے؛ اس میں جمع اور تفریق کے لیے سلاخوں پر مالائیں استعمال ہوتی تھیں۔"},
+
+{id:5,difficulty:"Easy",topic:"ابتدائی آلات",
+ q:"Napier's Bones کس نے ایجاد کیا؟",
+ o:["Blaise Pascal","John Napier","Charles Babbage","Gottfried Leibniz"],
+ a:1,
+ e:"Napier's Bones (1617) جان نیپئر نے ایجاد کیا — یہ نمبر شدہ سلاخوں کا دستی حسابی آلہ تھا جو جمع کے ذریعے ضرب اور تقسیم کرتا تھا۔"},
+
+{id:6,difficulty:"Easy",topic:"ابتدائی آلات",
+ q:"Pascaline کس نے بنایا؟",
+ o:["Blaise Pascal","John Napier","Herman Hollerith","Joseph Marie Jacquard"],
+ a:0,
+ e:"Pascaline (1642) بلیز پاسکل نے بنایا — پہلا مکینیکل کیلکولیٹر جو گھرنیوں اور پہیوں کے ذریعے جمع اور تفریق کر سکتا تھا۔"},
+
+{id:7,difficulty:"Easy",topic:"کمپیوٹر کا باپ",
+ q:"'کمپیوٹر کا باپ' کس کو کہا جاتا ہے؟",
+ o:["Ada Lovelace","John Napier","Herman Hollerith","Charles Babbage"],
+ a:3,
+ e:"چارلس بیبیج کو 'کمپیوٹر کا باپ' کہا جاتا ہے کیونکہ ان کے Analytical Engine میں جدید کمپیوٹر کے تمام ضروری اجزاء موجود تھے: ان پٹ، میموری، پراسیسنگ یونٹ اور آؤٹ پٹ۔"},
+
+{id:8,difficulty:"Easy",topic:"پہلا پروگرامر",
+ q:"دنیا کا پہلا کمپیوٹر پروگرامر کس کو سمجھا جاتا ہے؟",
+ o:["Charles Babbage","Ada Lovelace","Blaise Pascal","Gottfried Leibniz"],
+ a:1,
+ e:"ایڈا لوویلیس نے Analytical Engine کے لیے پہلا الگورتھم لکھا اور انہیں دنیا کا پہلا کمپیوٹر پروگرامر سمجھا جاتا ہے۔"},
+
+{id:9,difficulty:"Easy",topic:"پہلی نسل",
+ q:"پہلی نسل کے کمپیوٹرز میں کون سی ٹیکنالوجی استعمال ہوئی؟",
+ o:["Transistors","Integrated Circuits","Vacuum Tubes","Microprocessors"],
+ a:2,
+ e:"پہلی نسل کے کمپیوٹرز (1940–1956) میں ویکیوم ٹیوبز بنیادی سوئچنگ اور ایمپلیفائنگ جزو کے طور پر استعمال ہوئیں، اور میموری کے لیے مقناطیسی ڈرم۔"},
+
+{id:10,difficulty:"Easy",topic:"دوسری نسل",
+ q:"دوسری نسل کے کمپیوٹرز میں ویکیوم ٹیوبز کی جگہ کیا آیا؟",
+ o:["Integrated Circuits","Transistors","Microprocessors","Artificial Intelligence"],
+ a:1,
+ e:"ٹرانزسٹرز (1947 میں بیل لیبز میں ایجاد) نے دوسری نسل (1956–1963) میں ویکیوم ٹیوبز کی جگہ لی۔"},
+
+{id:11,difficulty:"Easy",topic:"ٹرانزسٹر",
+ q:"ٹرانزسٹر کس سال ایجاد ہوا؟",
+ o:["1956","1947","1940","1958"],
+ a:1,
+ e:"ٹرانزسٹر 1947 میں بیل لیبز میں ایجاد ہوا۔"},
+
+{id:12,difficulty:"Easy",topic:"تیسری نسل",
+ q:"IC کا مطلب کیا ہے؟",
+ o:["Internal Computer","Integrated Circuit","Intel Chip","Input Control"],
+ a:1,
+ e:"IC کا مطلب Integrated Circuit ہے — ایک چھوٹی چپ (سلیکون ویفر) جس میں بہت سے ٹرانزسٹرز اور الیکٹرانک اجزاء ہوتے ہیں۔"},
+
+{id:13,difficulty:"Easy",topic:"چوتھی نسل",
+ q:"پہلا تجارتی مائیکرو پروسیسر کون سا تھا؟",
+ o:["Intel 8086","PDP-8","IBM PC","Intel 4004"],
+ a:3,
+ e:"Intel 4004 (1971) پہلا تجارتی مائیکرو پروسیسر تھا۔"},
+
+{id:14,difficulty:"Easy",topic:"چوتھی نسل",
+ q:"Intel 4004 کب لانچ ہوا؟",
+ o:["1964","1971","1981","1958"],
+ a:1,
+ e:"Intel 4004 مائیکرو پروسیسر 1971 میں لانچ ہوا۔"},
+
+{id:15,difficulty:"Easy",topic:"GUI",
+ q:"GUI کا مطلب کیا ہے؟",
+ o:["Graphical User Interface","General User Interface","Graphical Utility Interface","General Utility Integration"],
+ a:0,
+ e:"GUI کا مطلب Graphical User Interface ہے — آئیکنز، ونڈوز اور ماؤس کے ذریعے کمپیوٹر سے تعامل کا بصری طریقہ، بجائے ٹائپ شدہ کمانڈز کے۔"},
+
+{id:16,difficulty:"Easy",topic:"چوتھی نسل",
+ q:"IBM پرسنل کمپیوٹر کس سال لانچ ہوا؟",
+ o:["1971","1984","1981","1991"],
+ a:2,
+ e:"IBM پرسنل کمپیوٹر (PC) 1981 میں لانچ ہوا، جس نے پرسنل کمپیوٹنگ کو معیاری بنایا۔"},
+
+{id:17,difficulty:"Easy",topic:"ENIAC",
+ q:"ENIAC کس سال بنایا گیا؟",
+ o:["1951","1946","1940","1956"],
+ a:1,
+ e:"ENIAC (Electronic Numerical Integrator and Computer) 1946 میں بنایا گیا — پہلا جنرل پرپز الیکٹرانک کمپیوٹر۔"},
+
+{id:18,difficulty:"Easy",topic:"ENIAC",
+ q:"ENIAC کا مکمل نام کیا ہے؟",
+ o:["Electronic Numerical Integrated Analyzer and Computer","Electronic Numerical Integrator and Computer","Electronic Network Integrator and Calculator","Electrical Numerical Integrator and Calculator"],
+ a:1,
+ e:"ENIAC کا مکمل نام Electronic Numerical Integrator and Computer ہے۔"},
+
+{id:19,difficulty:"Easy",topic:"پانچویں نسل",
+ q:"پانچویں نسل کے کمپیوٹرز کا مرکزی موضوع کون سی ٹیکنالوجی ہے؟",
+ o:["Vacuum Tubes","Transistors","Integrated Circuits","Artificial Intelligence"],
+ a:3,
+ e:"پانچویں نسل (2010–حال) کا مرکز Artificial Intelligence (AI)، مشین لرننگ، نیچرل لینگویج پراسیسنگ اور متعلقہ ٹیکنالوجیز ہیں۔"},
+
+{id:20,difficulty:"Easy",topic:"مور کا قانون",
+ q:"مور کا قانون کیا کہتا ہے؟",
+ o:["کمپیوٹرز کی رفتار ہر سال دوگنی ہو جاتی ہے","مائیکرو چپ پر ٹرانزسٹرز کی تعداد تقریباً ہر دو سال بعد دوگنی ہو جاتی ہے","کمپیوٹرز کی قیمت ہر دو سال بعد دوگنی ہو جاتی ہے","کمپیوٹر کا سائز ہر دو سال بعد دوگنا ہو جاتا ہے"],
+ a:1,
+ e:"مور کا قانون (گورڈن مور، 1965) کا مشاہدہ ہے کہ مائیکرو چپ پر ٹرانزسٹرز کی تعداد تقریباً ہر دو سال بعد دوگنی ہو جاتی ہے، جبکہ قیمت کم ہوتی جاتی ہے۔"},
+
+{id:21,difficulty:"Easy",topic:"ہارڈ ویئر",
+ q:"ہارڈ ویئر کیا ہے؟",
+ o:["ہدایات کا مجموعہ جو کمپیوٹر کو بتاتا ہے کہ کیا کرنا ہے","کمپیوٹر کے جسمانی، ٹھوس اجزاء","کمپیوٹر کا دماغ","ایک قسم کا سافٹ ویئر"],
+ a:1,
+ e:"ہارڈ ویئر کمپیوٹر کے جسمانی، ٹھوس اجزاء ہیں جیسے CPU، مانیٹر اور کی بورڈ۔"},
+
+{id:22,difficulty:"Easy",topic:"سافٹ ویئر",
+ q:"سافٹ ویئر کیا ہے؟",
+ o:["کمپیوٹر کے جسمانی اجزاء","مانیٹر اور کی بورڈ","ہدایات کا مجموعہ جو ہارڈ ویئر کو بتاتا ہے کہ کیا کرنا ہے","ایک قسم کی کمپیوٹر چپ"],
+ a:2,
+ e:"سافٹ ویئر ہدایات (پروگرام) کا مجموعہ ہے جو ہارڈ ویئر کو بتاتا ہے کہ کیا کرنا ہے۔"},
+
+{id:23,difficulty:"Easy",topic:"ابتدائی آلات",
+ q:"کس آلے نے بنائی کے نمونوں کو کنٹرول کرنے کے لیے پنچڈ کارڈز استعمال کیے؟",
+ o:["Pascaline","Jacquard's Loom","Analytical Engine","Tabulating Machine"],
+ a:1,
+ e:"Jacquard's Loom (1801، Joseph Marie Jacquard) نے بنائی کے نمونوں کو کنٹرول کرنے کے لیے پنچڈ کارڈز استعمال کیے اور قابل پروگرام مشینوں اور پنچڈ کارڈ ان پٹ کا تصور متعارف کرایا۔"},
+
+{id:24,difficulty:"Easy",topic:"Abacus",
+ q:"Abacus بابل میں تقریباً کس سال استعمال ہوا؟",
+ o:["1617","~2400 قبل مسیح","1642","1801"],
+ a:1,
+ e:"Abacus تقریباً 2400 قبل مسیح میں بابل/چین میں حساب کتاب کے لیے استعمال ہوتا تھا۔"},
+
+{id:25,difficulty:"Easy",topic:"ابتدائی آلات",
+ q:"امریکی مردم شماری کے ڈیٹا کو ترتیب دینے کے لیے کون سا آلہ استعمال ہوا؟",
+ o:["Analytical Engine","Tabulating Machine","Difference Engine","Pascaline"],
+ a:1,
+ e:"Tabulating Machine (1890، Herman Hollerith) نے امریکی مردم شماری کے ڈیٹا کو ترتیب دینے کے لیے پنچڈ کارڈز استعمال کیے؛ ہولیرتھ کی کمپنی بعد میں IBM کا حصہ بن گئی۔"},
+
+{id:26,difficulty:"Easy",topic:"ابتدائی آلات",
+ q:"Tabulating Machine کس نے ایجاد کیا؟",
+ o:["Charles Babbage","Blaise Pascal","John Napier","Herman Hollerith"],
+ a:3,
+ e:"ہرمن ہولیرتھ نے Tabulating Machine (1890) امریکی مردم شماری کے ڈیٹا کی پراسیسنگ کے لیے ایجاد کیا۔"},
+
+{id:27,difficulty:"Easy",topic:"پہلی نسل",
+ q:"پہلی نسل کے کمپیوٹرز کون سی پروگرامنگ زبان استعمال کرتے تھے؟",
+ o:["Assembly language","COBOL","Machine language","Python"],
+ a:2,
+ e:"پہلی نسل کے کمپیوٹرز مشین لینگویج (بائنری کوڈ، 0 اور 1) استعمال کرتے تھے۔"},
+
+{id:28,difficulty:"Easy",topic:"پہلی نسل",
+ q:"پہلی نسل کے کمپیوٹرز کون سا ان پٹ/آؤٹ پٹ طریقہ استعمال کرتے تھے؟",
+ o:["کی بورڈز اور مانیٹر","پنچڈ کارڈز اور پیپر ٹیپ","آواز اور ٹچ","ماؤس اور GUI"],
+ a:1,
+ e:"پہلی نسل کے کمپیوٹرز ان پٹ/آؤٹ پٹ کے لیے پنچڈ کارڈز اور پیپر ٹیپ استعمال کرتے تھے۔"},
+
+{id:29,difficulty:"Easy",topic:"ENIAC",
+ q:"ENIAC کا وزن تقریباً کتنا تھا؟",
+ o:["3 ٹن","30 ٹن","300 ٹن","18 ٹن"],
+ a:1,
+ e:"ENIAC کا وزن تقریباً 30 ٹن تھا، یہ 1,800 مربع فٹ پر پھیلا ہوا تھا اور اس میں تقریباً 18,000 ویکیوم ٹیوبز استعمال ہوئیں۔"},
+
+{id:30,difficulty:"Easy",topic:"ENIAC",
+ q:"ENIAC میں تقریباً کتنی ویکیوم ٹیوبز استعمال ہوئیں؟",
+ o:["1,800","180,000","18,000","180"],
+ a:2,
+ e:"ENIAC میں تقریباً 18,000 ویکیوم ٹیوبز استعمال ہوئیں۔"},
+
+{id:31,difficulty:"Easy",topic:"انٹرنیٹ سنگ میل",
+ q:"ورلڈ وائڈ ویب کس سال عوام کے لیے دستیاب ہوا؟",
+ o:["1984","1991","2007","1981"],
+ a:1,
+ e:"ورلڈ وائڈ ویب 1991 میں عوام کے لیے دستیاب ہوا۔"},
+
+{id:32,difficulty:"Easy",topic:"پرسنل کمپیوٹنگ",
+ q:"2007 میں کس ڈیوائس نے پرسنل کمپیوٹنگ کی نئی تعریف کی؟",
+ o:["IBM PC","Apple Macintosh","iPhone","Intel 4004"],
+ a:2,
+ e:"اسمارٹ فونز (آئی فون، 2007) نے پرسنل کمپیوٹنگ کی نئی تعریف کی۔"},
+
+{id:33,difficulty:"Easy",topic:"تیسری نسل",
+ q:"کس نسل نے آپریٹنگ سسٹمز متعارف کرائے؟",
+ o:["پہلی","دوسری","چوتھی","تیسری"],
+ a:3,
+ e:"آپریٹنگ سسٹمز تیسری نسل (1964–1971) میں متعارف کرائے گئے۔"},
+
+{id:34,difficulty:"Easy",topic:"مصنوعی ذہانت",
+ q:"AI کا مطلب کیا ہے؟",
+ o:["Automatic Intelligence","Artificial Intelligence","Advanced Integration","Applied Informatics"],
+ a:1,
+ e:"AI کا مطلب Artificial Intelligence ہے — کمپیوٹنگ کی وہ شاخ جو ایسے نظام بنانے پر مرکوز ہے جو انسانی ذہانت کی ضرورت والے کام انجام دے سکیں۔"},
+
+{id:35,difficulty:"Easy",topic:"خصوصیات",
+ q:"کمپیوٹر کی کون سی خصوصیت اسے فی سیکنڈ لاکھوں سے اربوں حسابات کرنے کی اجازت دیتی ہے؟",
+ o:["درستگی","محنت","رفتار","اسٹوریج"],
+ a:2,
+ e:"رفتار (Speed) MIPS/FLOPs میں ماپی جاتی ہے — کمپیوٹر فی سیکنڈ لاکھوں سے اربوں حسابات انجام دیتا ہے۔"},
+
+/* ---------- درمیانہ (25) ---------- */
+{id:36,difficulty:"Medium",topic:"تیسری نسل",
+ q:"کس نسل نے کی بورڈز اور مانیٹر متعارف کرائے؟",
+ o:["پہلی","دوسری","چوتھی","تیسری"],
+ a:3,
+ e:"کی بورڈز اور مانیٹر تیسری نسل (1964–1971) میں متعارف کرائے گئے۔"},
+
+{id:37,difficulty:"Medium",topic:"تیسری نسل",
+ q:"کس نسل کے کمپیوٹرز میز کے سائز کے تھے؟",
+ o:["پہلی","دوسری","چوتھی","تیسری"],
+ a:3,
+ e:"تیسری نسل کے کمپیوٹرز (1964–1971) میز کے سائز کے تھے — پہلی نسلوں سے کافی چھوٹے۔"},
+
+{id:38,difficulty:"Medium",topic:"پہلی نسل",
+ q:"کس نسل کے کمپیوٹرز کی رفتار ملی سیکنڈز میں تھی؟",
+ o:["دوسری","پہلی","تیسری","چوتھی"],
+ a:1,
+ e:"پہلی نسل کے کمپیوٹرز کی رفتار ملی سیکنڈز میں تھی — بعد کی نسلوں کے مقابلے میں بہت سست۔"},
+
+{id:39,difficulty:"Medium",topic:"پہلی نسل",
+ q:"کس نسل نے میموری کے لیے مقناطیسی ڈرم استعمال کیے؟",
+ o:["دوسری","پہلی","تیسری","چوتھی"],
+ a:1,
+ e:"پہلی نسل کے کمپیوٹرز میموری کے لیے ویکیوم ٹیوبز اور مقناطیسی ڈرم استعمال کرتے تھے۔"},
+
+{id:40,difficulty:"Medium",topic:"IPO سائیکل",
+ q:"IPO سائیکل کا مطلب کیا ہے؟",
+ o:["Input-Program-Output","Input-Process-Output","Internal-Process-Output","Input-Process-Operation"],
+ a:1,
+ e:"IPO سائیکل Input-Process-Output ہے، جسے اسٹوریج کے ساتھ مزید وسیع کیا جاتا ہے — یہ کمپیوٹر کا فعال سائیکل ہے۔"},
+
+{id:41,difficulty:"Medium",topic:"دوسری نسل",
+ q:"کس نسل نے سب سے پہلے اسمبلی لینگویج استعمال کی؟",
+ o:["پہلی","دوسری","تیسری","چوتھی"],
+ a:1,
+ e:"دوسری نسل کے کمپیوٹرز نے اسمبلی لینگویج اور ابتدائی ہائی لیول زبانیں (COBOL، FORTRAN) استعمال کیں۔"},
+
+{id:42,difficulty:"Medium",topic:"ابتدائی آلات",
+ q:"ان ابتدائی آلات کی درست زمانی ترتیب کون سی ہے؟",
+ o:["Pascaline، Abacus، Tabulating Machine، Analytical Engine","Abacus، Pascaline، Analytical Engine، Tabulating Machine","Analytical Engine، Abacus، Pascaline، Tabulating Machine","Tabulating Machine، Pascaline، Abacus، Analytical Engine"],
+ a:1,
+ e:"زمانی ترتیب: Abacus (~2400 قبل مسیح) → Pascaline (1642) → Analytical Engine (1837) → Tabulating Machine (1890)۔"},
+
+{id:43,difficulty:"Medium",topic:"کمپیوٹر کا باپ",
+ q:"چارلس بیبیج کو 'کمپیوٹر کا باپ' کیوں کہا جاتا ہے؟",
+ o:["انہوں نے پہلا الیکٹرانک کمپیوٹر ایجاد کیا","انہوں نے پہلا مائیکرو پروسیسر بنایا","انہوں نے پہلا کمپیوٹر پروگرام لکھا","ان کے Analytical Engine میں جدید کمپیوٹر کے تمام ضروری اجزاء موجود تھے"],
+ a:3,
+ e:"بیبیج کو کمپیوٹر کا باپ اس لیے کہا جاتا ہے کہ ان کے Analytical Engine میں ان پٹ، میموری (اسٹور)، پراسیسنگ یونٹ (مل) اور آؤٹ پٹ موجود تھے۔"},
+
+{id:44,difficulty:"Medium",topic:"Analytical Engine",
+ q:"کون سا کمپیوٹنگ آلہ مکمل طور پر تعمیر نہیں ہوا؟",
+ o:["Difference Engine","Analytical Engine","Pascaline","Tabulating Machine"],
+ a:1,
+ e:"Analytical Engine (1837، چارلس بیبیج) مکمل طور پر تعمیر نہیں ہوا، لیکن تصوراتی طور پر یہ جدید کمپیوٹر کا پیشرو تھا۔"},
+
+{id:45,difficulty:"Medium",topic:"دوسری نسل",
+ q:"کس نسل نے پہلی نسل کے مقابلے میں قابل بھروسہ ہونے میں نمایاں بہتری لائی؟",
+ o:["تیسری","دوسری","چوتھی","پانچویں"],
+ a:1,
+ e:"دوسری نسل کے کمپیوٹرز (ٹرانزسٹرز) نے پہلی نسل کے ویکیوم ٹیوب کمپیوٹرز کے مقابلے میں قابل بھروسہ ہونے میں نمایاں بہتری لائی۔"},
+
+{id:46,difficulty:"Medium",topic:"تیسری نسل",
+ q:"کس نسل نے ملٹی ٹاسکنگ متعارف کرائی؟",
+ o:["پہلی","دوسری","تیسری","پانچویں"],
+ a:2,
+ e:"تیسری نسل (1964–1971) میں انٹیگریٹڈ سرکٹس اور آپریٹنگ سسٹمز کی بدولت ملٹی ٹاسکنگ ممکن ہوئی۔"},
+
+{id:47,difficulty:"Medium",topic:"چوتھی نسل",
+ q:"کس ٹیکنالوجی نے پرسنل کمپیوٹرز کی تشکیل ممکن بنائی؟",
+ o:["Vacuum Tubes","Transistors","Magnetic Drums","Microprocessor"],
+ a:3,
+ e:"مائیکرو پروسیسر (Intel 4004، 1971) نے پرسنل کمپیوٹرز کو ممکن بنایا — ایک ہی چپ میں مکمل CPU۔"},
+
+{id:48,difficulty:"Medium",topic:"دوسری نسل",
+ q:"کس نسل نے ان پٹ/آؤٹ پٹ کے لیے مقناطیسی ٹیپ استعمال کی؟",
+ o:["پہلی","دوسری","تیسری","چوتھی"],
+ a:1,
+ e:"دوسری نسل کے کمپیوٹرز ان پٹ/آؤٹ پٹ کے لیے پنچڈ کارڈز اور مقناطیسی ٹیپ استعمال کرتے تھے۔"},
+
+{id:49,difficulty:"Medium",topic:"درستگی / GIGO",
+ q:"GIGO اصول کمپیوٹر کی کس خصوصیت سے سب سے زیادہ متعلق ہے؟",
+ o:["رفتار","محنت","درستگی","اسٹوریج"],
+ a:2,
+ e:"درستگی: کمپیوٹر غلطی سے پاک نتائج دیتا ہے بشرطیکہ ان پٹ ڈیٹا اور ہدایات درست ہوں — یہ GIGO اصول ہے۔"},
+
+{id:50,difficulty:"Medium",topic:"خصوصیات",
+ q:"کون سی خصوصیت کمپیوٹر کو تھکاوٹ کے بغیر مسلسل دہرائے جانے والے کام کرنے کی اجازت دیتی ہے؟",
+ o:["رفتار","درستگی","محنت","ذہانت"],
+ a:2,
+ e:"محنت (Diligence): کمپیوٹر تھکاوٹ، بوریت یا درستگی میں کمی کے بغیر مسلسل دہرائے جانے والے کام انجام دے سکتا ہے۔"},
+
+{id:51,difficulty:"Medium",topic:"رفتار کی پیمائش",
+ q:"ماخذ کے مطابق کمپیوٹر کی رفتار کی پیمائش کے لیے کون سی اکائی استعمال ہوتی ہے؟",
+ o:["MB/GB","MIPS/FLOPs","صرف GHz","Pixels"],
+ a:1,
+ e:"رفتار MIPS/FLOPs میں ماپی جاتی ہے — فی سیکنڈ لاکھوں سے اربوں حسابات۔"},
+
+{id:52,difficulty:"Medium",topic:"چوتھی نسل",
+ q:"کس نسل نے گرافیکل یوزر انٹرفیس (GUI) متعارف کرایا؟",
+ o:["دوسری","تیسری","چوتھی","پانچویں"],
+ a:2,
+ e:"GUI چوتھی نسل (1971–2010) میں ابھرا؛ Apple Macintosh (1984) نے اسے عوام تک پہنچایا۔"},
+
+{id:53,difficulty:"Medium",topic:"پہلی نسل",
+ q:"پہلی نسل کے کمپیوٹرز کی رفتار کتنی تھی؟",
+ o:["نینو سیکنڈز","مائیکرو سیکنڈز","ملی سیکنڈز","پکو سیکنڈز"],
+ a:2,
+ e:"پہلی نسل کے کمپیوٹرز کی رفتار ملی سیکنڈز میں تھی — پانچوں نسلوں میں سب سے سست۔"},
+
+{id:54,difficulty:"Medium",topic:"دوسری نسل",
+ q:"دوسری نسل کے کمپیوٹرز میں کون سی پروگرامنگ زبانیں استعمال ہوئیں؟",
+ o:["صرف مشین لینگویج","Python، TensorFlow","C، C++، Java","Assembly language، COBOL، FORTRAN"],
+ a:3,
+ e:"دوسری نسل کے کمپیوٹرز نے اسمبلی لینگویج اور ابتدائی ہائی لیول زبانیں جیسے COBOL اور FORTRAN استعمال کیں۔"},
+
+{id:55,difficulty:"Medium",topic:"نسلوں کا جائزہ",
+ q:"کون سی ترتیب کمپیوٹر کی پانچ نسلوں کو درست طریقے سے ظاہر کرتی ہے؟",
+ o:["Transistors → Vacuum Tubes → Microprocessors → ICs → AI","Vacuum Tubes → Transistors → ICs → Microprocessors → AI","ICs → Vacuum Tubes → Transistors → AI → Microprocessors","AI → Microprocessors → ICs → Transistors → Vacuum Tubes"],
+ a:1,
+ e:"پانچ نسلیں: Vacuum Tubes (پہلی) → Transistors (دوسری) → Integrated Circuits (تیسری) → Microprocessors (چوتھی) → AI (پانچویں)۔"},
+
+{id:56,difficulty:"Medium",topic:"تیسری نسل",
+ q:"کس نسل نے FORTRAN، BASIC اور COBOL جیسی ہائی لیول زبانیں متعارف کرائیں؟",
+ o:["پہلی","دوسری","چوتھی","تیسری"],
+ a:3,
+ e:"تیسری نسل کے کمپیوٹرز نے ہائی لیول زبانیں (FORTRAN، BASIC، COBOL) استعمال کیں اور آپریٹنگ سسٹمز متعارف کرائے۔"},
+
+{id:57,difficulty:"Medium",topic:"پانچویں نسل",
+ q:"پانچویں نسل کی کمپیوٹنگ کون سے ان پٹ کی اقسام کی حمایت کرتی ہے؟",
+ o:["صرف کی بورڈ اور ماؤس","آواز، ٹچ، اشارہ، بایو میٹرک","صرف پنچڈ کارڈز","صرف پیپر ٹیپ"],
+ a:1,
+ e:"پانچویں نسل کی کمپیوٹنگ آواز، ٹچ، اشارہ اور بایو میٹرک ان پٹ کی حمایت کرتی ہے، اور AI سے تیار کردہ ملٹی میڈیا آؤٹ پٹ دیتی ہے۔"},
+
+{id:58,difficulty:"Medium",topic:"چوتھی نسل",
+ q:"1984 میں کون سا سنگ میل واقع ہوا؟",
+ o:["IBM PC لانچ ہوا","Intel 4004 لانچ ہوا","ورلڈ وائڈ ویب لانچ ہوا","Apple Macintosh نے GUI متعارف کرایا"],
+ a:3,
+ e:"1984 میں Apple Macintosh نے گرافیکل یوزر انٹرفیس (GUI) اور ماؤس کو عوام تک پہنچایا۔"},
+
+{id:59,difficulty:"Medium",topic:"پانچویں نسل",
+ q:"کون سی نسل پیرلل پراسیسنگ استعمال کرتی ہے؟",
+ o:["پہلی","پانچویں","تیسری","چوتھی"],
+ a:1,
+ e:"پانچویں نسل کی کمپیوٹنگ AI، ML، NLP، کوانٹم کمپیوٹنگ (ابھرتی ہوئی) اور پیرلل پراسیسنگ استعمال کرتی ہے۔"},
+
+{id:60,difficulty:"Medium",topic:"ابتدائی آلات",
+ q:"Pascaline اور Stepped Reckoner میں بنیادی فرق کیا ہے؟",
+ o:["Pascaline ضرب کر سکتا تھا، Stepped Reckoner نہیں","Pascaline الیکٹرانک تھا، Stepped Reckoner مکینیکل","کوئی فرق نہیں","Stepped Reckoner ضرب اور تقسیم بھی انجام دے سکتا تھا"],
+ a:3,
+ e:"Stepped Reckoner (1673، Gottfried Leibniz) نے پاسکل کے ڈیزائن کو بہتر بنایا اور ضرب و تقسیم بھی انجام دے سکتا تھا۔"},
+
+/* ---------- مشکل (10) ---------- */
+{id:61,difficulty:"Hard",topic:"نسل کی مطابقت",
+ q:"کون سا جوڑا نسل اور اس کی بنیادی ٹیکنالوجی کو درست طریقے سے ملاتا ہے؟",
+ o:["تیسری نسل - Vacuum Tubes","چوتھی نسل - Microprocessor","دوسری نسل - Integrated Circuits","پہلی نسل - Transistors"],
+ a:1,
+ e:"چوتھی نسل (1971–2010) = Microprocessor۔ پہلی = Vacuum Tubes؛ دوسری = Transistors؛ تیسری = ICs۔"},
+
+{id:62,difficulty:"Hard",topic:"درستگی / GIGO",
+ q:"GIGO اصول کے مطابق، اگر درست پراسیسنگ کے باوجود کمپیوٹر غلط آؤٹ پٹ دے، تو ممکنہ وجہ کیا ہے؟",
+ o:["CPU خراب ہے","ان پٹ ڈیٹا یا ہدایات غلط تھیں","مانیٹر خراب ہے","اسٹوریج ڈیوائس بھری ہوئی ہے"],
+ a:1,
+ e:"GIGO (Garbage In, Garbage Out): آؤٹ پٹ کی درستگی کا انحصار ان پٹ ڈیٹا اور ہدایات کے درست ہونے پر ہے۔"},
+
+{id:63,difficulty:"Hard",topic:"رفتار کا موازنہ",
+ q:"کون سی ترتیب نسلوں کو رفتار کے لحاظ سے سست سے تیز ترتیب دیتی ہے؟",
+ o:["پکو سیکنڈز → نینو سیکنڈز → مائیکرو سیکنڈز → ملی سیکنڈز","ملی سیکنڈز → مائیکرو سیکنڈز → نینو سیکنڈز → پکو سیکنڈز","مائیکرو سیکنڈز → ملی سیکنڈز → پکو سیکنڈز → نینو سیکنڈز","نینو سیکنڈز → پکو سیکنڈز → ملی سیکنڈز → مائیکرو سیکنڈز"],
+ a:1,
+ e:"رفتار کی ترتیب: پہلی = ملی سیکنڈز، دوسری = مائیکرو سیکنڈز، تیسری = نینو سیکنڈز، چوتھی = پکو سیکنڈز۔"},
+
+{id:64,difficulty:"Hard",topic:"موجد",
+ q:"کون سا جوڑا موجد اور ایجاد کو درست طریقے سے ملاتا ہے؟",
+ o:["Blaise Pascal - Stepped Reckoner","Gottfried Leibniz - Stepped Reckoner","John Napier - Pascaline","Herman Hollerith - Analytical Engine"],
+ a:1,
+ e:"گاٹ فرائیڈ لائبنز نے Stepped Reckoner (1673) ایجاد کیا۔ پاسکل نے Pascaline بنایا؛ نیپئر نے Napier's Bones ایجاد کی؛ ہولیرتھ نے Tabulating Machine بنایا۔"},
+
+{id:65,difficulty:"Hard",topic:"Analytical Engine",
+ q:"Analytical Engine کا جدید کمپیوٹرز کے ساتھ کون سی مشترک خصوصیت تھی؟",
+ o:["یہ مائیکرو پروسیسر استعمال کرتا تھا","یہ AI استعمال کرتا تھا","اس میں ان پٹ، میموری، پراسیسنگ یونٹ اور آؤٹ پٹ موجود تھے","یہ پورٹیبل تھا"],
+ a:2,
+ e:"Analytical Engine میں جدید کمپیوٹر کے تمام ضروری اجزاء موجود تھے: ان پٹ، میموری (اسٹور)، پراسیسنگ یونٹ (مل) اور آؤٹ پٹ۔"},
+
+{id:66,difficulty:"Hard",topic:"نسل کی منتقلی",
+ q:"کس نسل کی منتقلی میں ویکیوم ٹیوبز کی جگہ ٹرانزسٹرز نے لی؟",
+ o:["دوسری سے تیسری","پہلی سے دوسری","تیسری سے چوتھی","چوتھی سے پانچویں"],
+ a:1,
+ e:"پہلی سے دوسری نسل کی منتقلی میں ویکیوم ٹیوبز کی جگہ ٹرانزسٹرز نے لی۔"},
+
+{id:67,difficulty:"Hard",topic:"پانچویں نسل",
+ q:"پانچویں نسل کی کمپیوٹنگ کے بارے میں کون سا بیان ماخذ سے تصدیق شدہ ہے؟",
+ o:["یہ بنیادی طور پر ویکیوم ٹیوبز پر انحصار کرتی ہے","یہ AI ورک لوڈز کو تیز کرنے کے لیے GPUs/TPUs استعمال کرتی ہے","یہ ان پٹ کے لیے پنچڈ کارڈز استعمال کرتی ہے","یہ ملی سیکنڈز کی رفتار سے کام کرتی ہے"],
+ a:1,
+ e:"پانچویں نسل کی کمپیوٹنگ AI ورک لوڈز کو تیز کرنے کے لیے GPUs/TPUs استعمال کرتی ہے، جس سے بے پناہ پیرلل پراسیسنگ طاقت ملتی ہے۔"},
+
+{id:68,difficulty:"Hard",topic:"سائز کا موازنہ",
+ q:"نسلوں کے مطابق کمپیوٹر کے سائز کی درست ترتیب (بڑے سے چھوٹے) کون سی ہے؟",
+ o:["Compact/Cloud → Desktop/Laptop → Desk-sized → Large cabinet → Room-sized","Room-sized → Large cabinet → Desk-sized → Desktop/Laptop → Compact/Cloud","Desk-sized → Room-sized → Large cabinet → Compact/Cloud → Desktop/Laptop","Large cabinet → Room-sized → Desktop/Laptop → Desk-sized → Compact/Cloud"],
+ a:1,
+ e:"سائز کا رجحان: پہلی = کمرے کے سائز کا → دوسری = بڑی کابینہ → تیسری = میز کے سائز کا → چوتھی = ڈیسک ٹاپ/لیپ ٹاپ → پانچویں = کمپیکٹ/کلاؤڈ بیسڈ۔"},
+
+{id:69,difficulty:"Hard",topic:"ابتدائی آلات",
+ q:"کس آلے نے پنچڈ کارڈ ان پٹ کا تصور متعارف کرایا؟",
+ o:["Pascaline","Jacquard's Loom","Difference Engine","Abacus"],
+ a:1,
+ e:"Jacquard's Loom (1801) نے بنائی کے نمونوں کو کنٹرول کرنے کے لیے پنچڈ کارڈز استعمال کیے اور قابل پروگرام مشینوں اور پنچڈ کارڈ ان پٹ کا تصور متعارف کرایا۔"},
+
+{id:70,difficulty:"Hard",topic:"تیسری نسل",
+ q:"کس نسل کی بنیادی ٹیکنالوجی سلیکون چپس ہیں؟",
+ o:["پہلی","دوسری","چوتھی","تیسری"],
+ a:3,
+ e:"تیسری نسل کے کمپیوٹرز نے Integrated Circuits (ICs) استعمال کیے، جنہیں سلیکون چپس بھی کہا جاتا ہے۔"}
+];
+
+/* ============================================================
+   کوئز انجن
+   ============================================================ */
+const TOTAL = QUIZ_DATA.length;
+let current = 0;
+let answers = new Array(TOTAL).fill(null);
+
+const el = id => document.getElementById(id);
+const startScreen = el("startScreen"), quizScreen = el("quizScreen"),
+      resultScreen = el("resultScreen"), reviewScreen = el("reviewScreen");
+
+function show(screen){
+  [startScreen,quizScreen,resultScreen,reviewScreen].forEach(s=>s.classList.add("hidden"));
+  screen.classList.remove("hidden");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+el("startBtn").addEventListener("click",()=>{
+  current=0; answers=new Array(TOTAL).fill(null);
+  renderQuestion(); show(quizScreen);
+});
+
+function renderQuestion(){
+  const q = QUIZ_DATA[current];
+  const ans = answers[current];
+
+  el("qCounter").textContent = `سوال ${current+1} از ${TOTAL}`;
+  el("qNum").textContent = `سوال ${current+1}`;
+  el("qText").textContent = q.q;
+  const diffMap = {Easy:"آسان",Medium:"درمیانہ",Hard:"مشکل"};
+  el("diffTag").textContent = diffMap[q.difficulty];
+  el("diffTag").className = "diff " + q.difficulty;
+  el("topicTag").textContent = "موضوع: " + q.topic;
+
+  el("progBar").style.width = ((current+1)/TOTAL*100) + "%";
+  el("scoreLive").textContent = `اسکور: ${answers.filter(a=>a&&a.correct).length}`;
+
+  const wrap = el("optionsWrap");
+  wrap.innerHTML = "";
+  const letters = ["A","B","C","D"];
+  q.o.forEach((opt,i)=>{
+    const btn = document.createElement("button");
+    btn.className = "opt";
+    btn.type = "button";
+    btn.innerHTML = `<span class="ltr">${letters[i]}.</span>${opt}`;
+    if(ans){
+      btn.classList.add("locked");
+      if(i===q.a) btn.classList.add("correct");
+      if(i===ans.selected && !ans.correct) btn.classList.add("wrong");
+      btn.disabled = true;
+    } else {
+      btn.addEventListener("click",()=>selectAnswer(i,btn));
+    }
+    wrap.appendChild(btn);
+  });
+
+  const fbWrap = el("feedbackWrap");
+  fbWrap.innerHTML = "";
+  if(ans){
+    const ok = ans.correct;
+    const div = document.createElement("div");
+    div.className = "fb " + (ok?"ok":"no");
+    div.setAttribute("role","status");
+    div.innerHTML = `<div class="fb-title">${ok?"✔ درست!":"✘ غلط!"}</div>
+      <div>درست جواب: <b>${letters[q.a]}. ${q.o[q.a]}</b></div>
+      <div class="exp"><b>وضاحت:</b> ${q.e}</div>`;
+    fbWrap.appendChild(div);
+  }
+
+  el("prevBtn").disabled = current===0;
+  el("nextBtn").textContent = current===TOTAL-1 ? "مکمل ✓" : "اگلا ←";
+  renderNavDots();
+}
+
+function selectAnswer(idx, btn){
+  const q = QUIZ_DATA[current];
+  if(answers[current]) return;
+  const correct = idx === q.a;
+  answers[current] = {selected:idx, correct:correct};
+
+  const opts = el("optionsWrap").querySelectorAll(".opt");
+  opts.forEach((b,i)=>{
+    b.classList.add("locked");
+    b.disabled = true;
+    if(i===q.a) b.classList.add("correct");
+    if(i===idx && !correct) b.classList.add("wrong");
+  });
+
+  const letters=["A","B","C","D"];
+  const fbWrap = el("feedbackWrap");
+  fbWrap.innerHTML="";
+  const div = document.createElement("div");
+  div.className = "fb " + (correct?"ok":"no");
+  div.setAttribute("role","status");
+  div.innerHTML = `<div class="fb-title">${correct?"✔ درست!":"✘ غلط!"}</div>
+    <div>درست جواب: <b>${letters[q.a]}. ${q.o[q.a]}</b></div>
+    <div class="exp"><b>وضاحت:</b> ${q.e}</div>`;
+  fbWrap.appendChild(div);
+
+  el("scoreLive").textContent = `اسکور: ${answers.filter(a=>a&&a.correct).length}`;
+  renderNavDots();
+}
+
+el("prevBtn").addEventListener("click",()=>{ if(current>0){current--;renderQuestion();} });
+el("nextBtn").addEventListener("click",()=>{
+  if(current<TOTAL-1){ current++; renderQuestion(); }
+  else { showResults(); }
+});
+
+function renderNavDots(){
+  const nav = el("navDots");
+  nav.innerHTML="";
+  QUIZ_DATA.forEach((q,i)=>{
+    const b=document.createElement("button");
+    b.type="button";
+    b.textContent=i+1;
+    if(i===current) b.classList.add("cur");
+    const a=answers[i];
+    if(a){ b.classList.add(a.correct?"done":"wrongd"); }
+    b.addEventListener("click",()=>{ current=i; renderQuestion(); });
+    b.setAttribute("aria-label",`سوال ${i+1} پر جائیں`);
+    nav.appendChild(b);
+  });
+}
+
+function showResults(){
+  const attempted = answers.filter(a=>a!==null).length;
+  const correct = answers.filter(a=>a&&a.correct).length;
+  const wrong = answers.filter(a=>a&&!a.correct).length;
+  const unanswered = TOTAL - attempted;
+  const pct = Math.round(correct/TOTAL*100);
+
+  el("rTotal").textContent = TOTAL;
+  el("rAttempted").textContent = attempted;
+  el("rCorrect").textContent = correct;
+  el("rWrong").textContent = wrong;
+  el("rUnans").textContent = unanswered;
+  el("rPct").textContent = pct + "%";
+  el("resBar").style.width = pct + "%";
+
+  const g = el("gradeBox");
+  let cls, txt;
+  if(pct>=90){cls="excellent";txt="بہترین — شاندار کارکردگی!";}
+  else if(pct>=80){cls="verygood";txt="بہت اچھا — مضبوط فہم!";}
+  else if(pct>=70){cls="good";txt="اچھا — مواد پر اچھی گرفت۔";}
+  else if(pct>=60){cls="improve";txt="بہتری کی ضرورت — کمزور موضوعات کا جائزہ لیں۔";}
+  else {cls="practice";txt="مزید مشق کی سفارش — ماخذ کا دوبارہ جائزہ لیں۔";}
+  g.className = "grade " + cls;
+  g.textContent = `${txt} (${pct}%)`;
+
+  const topicMap = {};
+  QUIZ_DATA.forEach((q,i)=>{
+    if(!topicMap[q.topic]) topicMap[q.topic]={total:0,correct:0};
+    topicMap[q.topic].total++;
+    if(answers[i] && answers[i].correct) topicMap[q.topic].correct++;
+  });
+  const ts = el("topicStats");
+  ts.innerHTML="";
+  Object.keys(topicMap).sort().forEach(t=>{
+    const s=topicMap[t];
+    const row=document.createElement("div");
+    row.className="topic-stat";
+    const p = Math.round(s.correct/s.total*100);
+    row.innerHTML=`<span>${t}</span><span class="${p>=60?'ok':'low'}">${s.correct}/${s.total} (${p}%)</span>`;
+    ts.appendChild(row);
+  });
+
+  const rec = el("recWrap");
+  rec.innerHTML="";
+  const add = html => { const d=document.createElement("div"); d.className="rec"; d.innerHTML=html; rec.appendChild(d); };
+
+  if(pct>=90){
+    add("<b>مجموعی:</b> بہترین کام! آپ کو کمپیوٹر کی تاریخ اور ارتقا پر مضبوط گرفت ہے۔");
+    add("<b>اگلا قدم:</b> اسی ماخذ سے پانچویں نسل (AI، ML، کوانٹم کمپیوٹنگ) کا مزید گہرائی سے مطالعہ کریں۔");
+  } else if(pct>=80){
+    add("<b>مجموعی:</b> بہت اچھی کارکردگی۔ آپ زیادہ تر تصورات واضح طور پر سمجھتے ہیں۔");
+    add("<b>مطالعہ مشورہ:</b> پانچوں نسلوں کے تقابلی خلاصے کو دوبارہ پڑھیں تاکہ موازنہ مزید بہتر ہو۔");
+  } else if(pct>=70){
+    add("<b>مجموعی:</b> اچھی کوشش۔ آپ کی گرفت اچھی ہے مگر کچھ تفصیلات کو مضبوط کرنے کی ضرورت ہے۔");
+    add("<b>مطالعہ مشورہ:</b> نسل کے موازنے کے جدول کے رفتار، سائز اور ٹیکنالوجی کالم پر توجہ دیں۔");
+  } else if(pct>=60){
+    add("<b>مجموعی:</b> بہتری کی ضرورت ہے۔ اوپر دیے گئے کمزور موضوعات کا جائزہ لیں۔");
+    add("<b>مطالعہ مشورہ:</b> ابتدائی حسابی آلات اور پانچ نسلوں کے ماخذ حصوں کا دوبارہ جائزہ لیں۔");
+  } else {
+    add("<b>مجموعی:</b> مزید مشق کی سفارش کی جاتی ہے۔ حوصلہ نہ ہاریں — ماخذ کو غور سے پڑھیں۔");
+    add("<b>مطالعہ مشورہ:</b> تعریفات (کمپیوٹر، IPO سائیکل، نسلیں) اور سنگ میل کی ٹائم لائن سے شروع کریں۔");
+  }
+
+  const weak = Object.keys(topicMap).filter(t=>{
+    const s=topicMap[t]; return s.correct/s.total < 0.6;
+  });
+  if(weak.length){
+    add("<b>ان موضوعات کا جائزہ لیں:</b> " + weak.join("، "));
+  }
+  if(wrong>0){
+    add(`<b>غلط جوابات:</b> آپ نے ${wrong} سوال(ات) غلط کیے۔ وضاحتیں دیکھنے کے لیے <i>جوابات کا جائزہ</i> بٹن استعمال کریں۔`);
+  }
+  if(unanswered>0){
+    add(`<b>بغیر جواب:</b> ${unanswered} سوال(ات) خالی چھوڑے گئے۔ اگلی بار ہر سوال کا جواب دینے کی کوشش کریں۔`);
+  }
+  add("<b>تجویز کردہ اگلا قدم:</b> کوئز دوبارہ شروع کریں اور بہتر اسکور کا ہدف رکھیں، یا کمزور موضوعات کے ماخذ حصوں کا جائزہ لیں۔");
+
+  show(resultScreen);
+}
+
+el("reviewBtn").addEventListener("click",()=>{
+  const wrap = el("reviewWrap");
+  wrap.innerHTML="";
+  const letters=["A","B","C","D"];
+  QUIZ_DATA.forEach((q,i)=>{
+    const a=answers[i];
+    const div=document.createElement("div");
+    div.className="card";
+    let status = a ? (a.correct?"✔ درست":"✘ غلط") : "— بغیر جواب";
+    let color = a ? (a.correct?"#15803d":"#991b1b") : "#64748b";
+    let optsHtml = q.o.map((o,j)=>{
+      let mark="";
+      if(j===q.a) mark=" ✔ (درست)";
+      if(a && j===a.selected && !a.correct) mark=" ✘ (آپ کا جواب)";
+      return `<div style="padding:4px 0">${letters[j]}. ${o}${mark}</div>`;
+    }).join("");
+    const diffMap = {Easy:"آسان",Medium:"درمیانہ",Hard:"مشکل"};
+    div.innerHTML = `<div class="q-num">سوال ${i+1} · <span class="diff ${q.difficulty}">${diffMap[q.difficulty]}</span> · ${q.topic}</div>
+      <div class="q-text" style="font-size:1rem">${q.q}</div>
+      ${optsHtml}
+      <div class="fb ${a&&a.correct?'ok':'no'}" style="margin-top:8px">
+        <div class="fb-title" style="color:${color}">${status}</div>
+        <div class="exp"><b>وضاحت:</b> ${q.e}</div>
+      </div>`;
+    wrap.appendChild(div);
+  });
+  show(reviewScreen);
+});
+
+el("backToResults").addEventListener("click",()=>show(resultScreen));
+
+function restart(){
+  current=0; answers=new Array(TOTAL).fill(null);
+  el("feedbackWrap").innerHTML="";
+  renderQuestion(); show(quizScreen);
+}
+el("restartBtn").addEventListener("click",restart);
+el("restartBtn2").addEventListener("click",restart);
+</script>
+</body>
+</html>
