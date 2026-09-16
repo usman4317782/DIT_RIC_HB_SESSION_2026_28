@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>آئی سی ٹی کوئز — کمپیوٹرز اور ہارڈویئر اجزاء کا تعارف</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body { height:100%; }
+  body {
+    font-family: 'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', 'Nafees Nastaleeq',
+                 'Alvi Nastaleeq', 'Urdu Typesetting', 'Noto Naskh Arabic',
+                 'Traditional Arabic', Tahoma, 'Segoe UI', sans-serif;
+    background: #0b1220;
+    color: #e6edf7;
+    min-height:100vh;
+    overflow-x:hidden;
+    user-select:none;
+    -webkit-user-select:none;
+    line-height: 1.9;
+    direction: rtl;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 14px; }
+
+  /* ---------- Generic ---------- */
+  .card {
+    background: #131c2e;
+    border: 1px solid #22304a;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  }
+  h1 { font-size: 1.5rem; line-height:1.7; }
+  h2 { font-size: 1.2rem; margin-bottom:10px; color:#7dd3fc; line-height:1.7; }
+  h3 { font-size: 1.05rem; margin-bottom:8px; color:#a5b4fc; }
+  p, li { line-height: 1.95; font-size: 1rem; }
+  ul { padding-right: 22px; padding-left: 0; }
+  .muted { color:#94a3b8; font-size:.85rem; }
+  .center { text-align:center; }
+  .hidden { display:none !important; }
+
+  /* ---------- Buttons ---------- */
+  button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 12px 20px;
+    transition: transform .08s ease, filter .15s ease;
+    line-height:1.8;
+  }
+  button:active { transform: scale(.98); }
+  .btn-primary { background: linear-gradient(135deg,#0ea5e9,#2563eb); color:#fff; }
+  .btn-primary:hover { filter: brightness(1.1); }
+  .btn-ghost { background:#1e293b; color:#cbd5e1; border:1px solid #334155; }
+  .btn-danger { background: linear-gradient(135deg,#ef4444,#b91c1c); color:#fff; }
+  .btn-block { width:100%; }
+
+  /* ---------- Start screen ---------- */
+  #screen-start .hero {
+    background: linear-gradient(135deg,#0ea5e9 0%,#6366f1 55%,#8b5cf6 100%);
+    border-radius: 16px;
+    padding: 24px 20px;
+    margin-bottom: 16px;
+    text-align:center;
+  }
+  #screen-start .hero h1 { color:#fff; margin-bottom:6px; }
+  #screen-start .hero p { color:#e0f2fe; font-size:.95rem; }
+  .info-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(130px,1fr)); gap:10px; margin:14px 0; }
+  .info-box { background:#0f172a; border:1px solid #22304a; border-radius:10px; padding:10px; text-align:center; }
+  .info-box .big { font-size:1.35rem; font-weight:700; color:#38bdf8; }
+  .info-box .lbl { font-size:.78rem; color:#94a3b8; margin-top:2px; }
+  .warn {
+    background: rgba(239,68,68,.10);
+    border: 1px solid rgba(239,68,68,.45);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin: 12px 0;
+    font-size: .92rem;
+    color:#fecaca;
+  }
+  .warn ul { padding-right:18px; padding-left:0; }
+  .warn li { margin-bottom:4px; }
+
+  /* ---------- Quiz header ---------- */
+  #quizTop {
+    position: sticky; top:0; z-index: 50;
+    background: rgba(11,18,32,.96);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid #22304a;
+    padding: 10px 14px;
+  }
+  .topline { display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; }
+  .pill {
+    background:#1e293b; border:1px solid #334155; border-radius:999px;
+    padding:5px 12px; font-size:.82rem; font-weight:600; color:#cbd5e1;
+    white-space:nowrap;
+  }
+  .pill.time { color:#fbbf24; border-color:#78350f; background:rgba(120,53,15,.35); }
+  .pill.qtime { color:#38bdf8; border-color:#0c4a6e; background:rgba(12,74,110,.35); }
+  .pill.att  { color:#4ade80; border-color:#14532d; background:rgba(20,83,45,.35); }
+  .pill.danger { color:#fca5a5; border-color:#7f1d1d; background:rgba(127,29,29,.4); }
+
+  .bar-outer { height:7px; background:#1e293b; border-radius:999px; overflow:hidden; margin-top:9px; direction:rtl; }
+  .bar-inner { height:100%; width:0%; background:linear-gradient(90deg,#0ea5e9,#22d3ee); border-radius:999px; transition: width .3s ease; }
+
+  /* ---------- Question ---------- */
+  #qCard { margin-top:16px; }
+  .qnum { font-size:.8rem; letter-spacing:.06em; color:#64748b; margin-bottom:8px; }
+  .qtext { font-size:1.15rem; font-weight:600; line-height:1.95; margin-bottom:16px; }
+
+  .opt {
+    display:flex; align-items:flex-start; gap:12px;
+    background:#0f172a;
+    border:1.5px solid #26364f;
+    border-radius:11px;
+    padding:13px 14px;
+    margin-bottom:10px;
+    cursor:pointer;
+    transition: all .15s ease;
+    font-size:1rem;
+    line-height:1.9;
+    color:#dbe6f5;
+  }
+  .opt:hover { border-color:#3b82f6; background:#12203a; }
+  .opt .key {
+    flex: 0 0 28px; height:28px; width:28px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:50%; background:#1e293b; border:1px solid #334155;
+    font-size:.82rem; font-weight:700; color:#93c5fd;
+    margin-top:4px;
+  }
+  .opt.selected { border-color:#22d3ee; background:rgba(34,211,238,.12); }
+  .opt.selected .key { background:#0891b2; border-color:#22d3ee; color:#fff; }
+
+  .quizfooter { display:flex; gap:10px; margin-top:6px; }
+  .quizfooter button { flex:1; }
+
+  /* ---------- Result ---------- */
+  .score-circle {
+    width: 160px; height:160px; border-radius:50%;
+    margin: 6px auto 14px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    border: 8px solid #1e293b;
+    background:#0f172a;
+  }
+  .score-circle .val { font-size:2.2rem; font-weight:800; }
+  .score-circle .sub { font-size:.82rem; color:#94a3b8; }
+  .stat-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(115px,1fr)); gap:10px; margin:16px 0; }
+  .stat { background:#0f172a; border:1px solid #22304a; border-radius:10px; padding:12px 8px; text-align:center; }
+  .stat .n { font-size:1.4rem; font-weight:800; }
+  .stat .l { font-size:.78rem; color:#94a3b8; margin-top:3px; }
+  .green { color:#4ade80; } .red { color:#f87171; } .amber { color:#fbbf24; } .blue { color:#38bdf8; }
+
+  .review-item { background:#0f172a; border:1px solid #22304a; border-radius:10px; padding:12px; margin-bottom:10px; }
+  .review-item .rq { font-weight:600; margin-bottom:8px; font-size:1rem; line-height:1.9; }
+  .review-item .ra { font-size:.92rem; margin-top:3px; line-height:1.85; }
+  .tag { display:inline-block; font-size:.72rem; padding:2px 8px; border-radius:999px; font-weight:700; margin-left:6px; vertical-align:middle; }
+  .tag.ok { background:rgba(74,222,128,.16); color:#4ade80; border:1px solid rgba(74,222,128,.4); }
+  .tag.no { background:rgba(248,113,113,.16); color:#f87171; border:1px solid rgba(248,113,113,.4); }
+  .tag.sk { background:rgba(251,191,36,.16); color:#fbbf24; border:1px solid rgba(251,191,36,.4); }
+
+  #reviewBox { max-height: 540px; overflow-y:auto; padding-left:4px; margin-top:10px; }
+  #reviewBox::-webkit-scrollbar { width:8px; }
+  #reviewBox::-webkit-scrollbar-thumb { background:#334155; border-radius:8px; }
+
+  /* ---------- Overlay (termination) ---------- */
+  #killOverlay {
+    position:fixed; inset:0; background:rgba(69,10,10,.97); z-index:9999;
+    display:flex; align-items:center; justify-content:center; padding:20px; text-align:center;
+  }
+  #killOverlay .box { max-width:540px; }
+  #killOverlay h2 { color:#fca5a5; font-size:1.6rem; margin-bottom:12px; line-height:1.8; }
+  #killOverlay p { color:#fecaca; margin-bottom:16px; font-size:1.05rem; }
+
+  @media (max-width: 480px){
+    h1 { font-size:1.25rem; }
+    .qtext { font-size:1.05rem; }
+    .opt { font-size:.95rem; padding:12px; }
+    .pill { font-size:.74rem; padding:4px 9px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ START SCREEN ============ -->
+<div id="screen-start" class="wrap">
+  <div class="hero">
+    <h1>آئی سی ٹی — ہارڈویئر اجزاء اور کمپیوٹر کی ارتقاء</h1>
+    <p>انفارمیشن اینڈ کمیونیکیشن ٹیکنالوجیز کا تعارف · ڈی آئی ٹی پارٹ-I</p>
+  </div>
+
+  <div class="card">
+    <h2>کوئز کی ہدایات</h2>
+    <div class="info-grid">
+      <div class="info-box"><div class="big">100</div><div class="lbl">ایم سی کیوز</div></div>
+      <div class="info-box"><div class="big">100 منٹ</div><div class="lbl">کل وقت</div></div>
+      <div class="info-box"><div class="big">60 سیکنڈ</div><div class="lbl">فی سوال</div></div>
+      <div class="info-box"><div class="big">1</div><div class="lbl">صرف ایک بار</div></div>
+    </div>
+
+    <ul style="margin-top:6px;">
+      <li>ہر سوال میں <b>چار آپشنز</b> ہیں؛ صرف ایک درست ہے۔</li>
+      <li>ہر سوال کے لیے <b>60 سیکنڈ کا ٹائمر</b> چلتا ہے۔ وقت ختم ہونے پر ٹیسٹ خودکار طور پر آگے بڑھ جاتا ہے۔</li>
+      <li><b>کل ٹائمر 100 منٹ</b> کا ہے۔ صفر پر پہنچنے پر ٹیسٹ خودکار طور پر جمع ہو جاتا ہے۔</li>
+      <li><b>واپس جانے کا کوئی آپشن نہیں</b> — <i>اگلا</i> دبانے کے بعد آپ پچھلے سوال پر واپس نہیں جا سکتے۔</li>
+      <li>کوشش کیے گئے سوالات ہیڈر بار میں براہ راست ٹریک ہوتے ہیں۔</li>
+      <li>جمع کرانے کے فوراً بعد نتائج، اسکور اور مکمل جائزہ دکھایا جاتا ہے۔</li>
+    </ul>
+
+    <div class="warn">
+      <b>⚠ اینٹی چیٹنگ پالیسی — سختی سے نافذ العمل</b>
+      <ul>
+        <li>ٹیب تبدیل کرنا، براؤزر کو منیمائز کرنا، یا کوئی اور ایپ کھولنا <b>ٹیسٹ فوراً ختم کر دے گا</b>۔</li>
+        <li>ونڈو کا فوکس کھونا (کوئز ونڈو سے باہر کلک کرنا) بھی ٹیسٹ ختم کر دیتا ہے۔</li>
+        <li>فل اسکرین موڈ سے باہر آنا ٹیسٹ ختم کر دیتا ہے۔</li>
+        <li>رائٹ کلک، کاپی، کٹ، پیسٹ، ٹیکسٹ سلیکشن، F12 اور ڈیولپر ٹول شارٹ کٹس غیر فعال ہیں۔</li>
+        <li>براؤزر کی بیک نیویگیشن بلاک ہے۔</li>
+      </ul>
+      <p style="margin-top:8px;">ختم کیے گئے ٹیسٹوں کی جانچ صرف اس وقت تک جواب دیے گئے سوالات پر کی جاتی ہے۔</p>
+    </div>
+
+    <div id="historyBox" class="muted" style="margin:12px 0;"></div>
+
+    <button id="startBtn" class="btn-primary btn-block" style="font-size:1.12rem; padding:15px;">▶ کوئز شروع کریں</button>
+    <p class="muted center" style="margin-top:10px;">مکمل طور پر آف لائن کام کرتا ہے · پیش رفت اس ڈیوائس پر مقامی طور پر محفوظ ہے</p>
+  </div>
+</div>
+
+<!-- ============ QUIZ SCREEN ============ -->
+<div id="screen-quiz" class="hidden">
+  <div id="quizTop">
+    <div class="topline">
+      <span class="pill" id="pillQ">سوال 1 / 100</span>
+      <span class="pill att" id="pillAtt">کوشش 0 / 100</span>
+      <span class="pill time" id="pillTime">⏱ 100:00</span>
+      <span class="pill qtime" id="pillQTime">⏳ 60s</span>
+    </div>
+    <div class="bar-outer"><div class="bar-inner" id="progressBar"></div></div>
+  </div>
+
+  <div class="wrap">
+    <div id="qCard" class="card">
+      <div class="qnum" id="qNumLabel">سوال 1</div>
+      <div class="qtext" id="qText"></div>
+      <div id="optionsBox"></div>
+      <div class="quizfooter">
+        <button id="nextBtn" class="btn-primary">اگلا ◀</button>
+      </div>
+      <p class="muted center" style="margin-top:12px;">ٹیب یا ونڈو تبدیل نہ کریں — ٹیسٹ ختم کر دیا جائے گا۔</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ RESULT SCREEN ============ -->
+<div id="screen-result" class="wrap hidden">
+  <div class="card" style="margin-top:10px;">
+    <div id="resultBanner"></div>
+    <h1 class="center" style="margin-bottom:4px;">ٹیسٹ مکمل ہو گیا</h1>
+    <p class="center muted" id="resultSub"></p>
+
+    <div class="score-circle" id="scoreCircle">
+      <div class="val" id="scoreVal">0%</div>
+      <div class="sub" id="scoreSub">0 / 100</div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat"><div class="n green" id="stCorrect">0</div><div class="l">درست</div></div>
+      <div class="stat"><div class="n red" id="stWrong">0</div><div class="l">غلط</div></div>
+      <div class="stat"><div class="n amber" id="stSkipped">0</div><div class="l">غیر کوشش شدہ</div></div>
+      <div class="stat"><div class="n blue" id="stAttempted">0</div><div class="l">کوشش شدہ</div></div>
+      <div class="stat"><div class="n" id="stTime">0:00</div><div class="l">لیا گیا وقت</div></div>
+      <div class="stat"><div class="n" id="stGrade">—</div><div class="l">گریڈ</div></div>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <button id="reviewToggle" class="btn-ghost" style="flex:1;">📋 جوابات کا جائزہ دکھائیں</button>
+      <button id="restartBtn" class="btn-primary" style="flex:1;">🔄 دوبارہ کوئز دیں</button>
+    </div>
+
+    <div id="reviewBox" class="hidden"></div>
+  </div>
+  <p class="muted center" style="margin:16px 0 30px;">© آئی سی ٹی کورس — ڈی آئی ٹی پارٹ-I · آف لائن اسیسمنٹ ماڈیول</p>
+</div>
+
+<!-- ============ TERMINATION OVERLAY ============ -->
+<div id="killOverlay" class="hidden">
+  <div class="box">
+    <h2>⛔ ٹیسٹ ختم کر دیا گیا</h2>
+    <p id="killReason">پالیسی کی خلاف ورزی کا پتہ چلا ہے۔</p>
+    <button id="killBtn" class="btn-danger" style="padding:12px 30px;">میرا نتیجہ دیکھیں</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ============================================================
+     سوالات کا بینک — 100 ایم سی کیوز (صرف فراہم کردہ نوٹس سے)
+     ============================================================ */
+  const QUESTIONS = [
+  { q:"ہارڈویئر کی کون سی قسم کمپیوٹر میں خام ڈیٹا اور ہدایات داخل کرنے کی ذمہ دار ہے؟",
+    o:["سٹوریج ڈیوائسز","کمیونیکیشن ڈیوائسز","اِن پُٹ ڈیوائسز","آؤٹ پُٹ ڈیوائسز"], a:2 },
+
+  { q:"کمپیوٹر سسٹم کے وہ جسمانی، چھو جانے والے حصے جو دیکھے اور چھوئے جا سکتے ہیں، مجموعی طور پر کہلاتے ہیں:",
+    o:["ہارڈویئر","سافٹ ویئر","فرم ویئر","شیر ویئر"], a:0 },
+
+  { q:"درج ذیل میں سے کون سی چیز کمپیوٹر ہارڈویئر کی پانچ وسیع اقسام میں شامل نہیں ہے؟",
+    o:["اِن پُٹ ڈیوائسز","سسٹم یونٹ","کمیونیکیشن ڈیوائسز","آپریٹنگ سسٹم"], a:3 },
+
+  { q:"سسٹم یونٹ میں درج ذیل میں سے کیا موجود ہوتا ہے؟",
+    o:["کی بورڈ اور ماؤس","CPU، مدر بورڈ اور میموری","پرنٹر اور پلاٹر","روٹر اور موڈیم"], a:1 },
+
+  { q:"کون سا آلہ چھپی ہوئی دستاویزات یا تصاویر کو ڈیجیٹل شکل میں تبدیل کرتا ہے؟",
+    o:["پلاٹر","پروجیکٹر","سکینر","اسپیکر"], a:2 },
+
+  { q:"بارکوڈ ریڈر کو کس قسم کے آلے میں شمار کیا جاتا ہے؟",
+    o:["آڈیو اِن پُٹ","بصری آؤٹ پُٹ","کمیونیکیشن ڈیوائس","آپٹیکل ڈیٹا کیپچر اِن پُٹ"], a:3 },
+
+  { q:"کون سا اِن پُٹ ڈیوائس انگلیوں یا اسٹائلس کے ذریعے ڈسپلے کے ساتھ براہ راست تعامل کی اجازت دیتا ہے؟",
+    o:["ٹچ اسکرین","جوائے اسٹک","ویب کیم","مائیکروفون"], a:0 },
+
+  { q:"GIGO اصول کمپیوٹر کی کس خصوصیت سے سب سے زیادہ وابستہ ہے؟",
+    o:["رفتار","درستگی","مستقل مزاجی","سٹوریج"], a:1 },
+
+  { q:"درج ذیل میں سے کون سا آڈیو اِن پُٹ ڈیوائس ہے؟",
+    o:["اسپیکر","ہیڈ فون","مائیکروفون","مانیٹر"], a:2 },
+
+  { q:"جوائے اسٹک بنیادی طور پر کس لیے استعمال ہوتا ہے؟",
+    o:["دستاویزات سکین کرنا","بڑی ڈرائنگ پرنٹ کرنا","نیٹ ورکس سے جڑنا","گیمنگ اور سیمولیشن یا مشینری کو کنٹرول کرنا"], a:3 },
+
+  { q:"کون سا آؤٹ پُٹ ڈیوائس ڈیجیٹل دستاویزات کی جسمانی، کاغذی کاپی تیار کرتا ہے؟",
+    o:["پرنٹر","مانیٹر","اسپیکر","پروجیکٹر"], a:0 },
+
+  { q:"مانیٹر کو کس قسم کے آؤٹ پُٹ میں شمار کیا جاتا ہے؟",
+    o:["ہارڈ کاپی","سافٹ کاپی","آڈیو آؤٹ پُٹ","بڑے فارمیٹ کا آؤٹ پُٹ"], a:1 },
+
+  { q:"کون سا آؤٹ پُٹ ڈیوائس اعلیٰ معیار کی بڑی ڈرائنگ جیسے آرکیٹیکچرل پلانز پرنٹ کرنے کے لیے استعمال ہوتا ہے؟",
+    o:["لیزر پرنٹر","پروجیکٹر","پلاٹر","سکینر"], a:2 },
+
+  { q:"ہیڈ فون کس قسم کا آؤٹ پُٹ فراہم کرتے ہیں؟",
+    o:["بصری (سافٹ کاپی)","بصری (ہارڈ کاپی)","بڑا ڈسپلے","آڈیو (ذاتی)"], a:3 },
+
+  { q:"کمپیوٹر کا 'دماغ' جو ہدایات کو fetch، decode اور execute کرتا ہے، وہ ہے:",
+    o:["CPU","مدر بورڈ","RAM","پاور سپلائی یونٹ"], a:0 },
+
+  { q:"کون سا جزو مرکزی سرکٹ بورڈ ہے جو تمام اندرونی اجزاء کو آپس میں جوڑتا ہے؟",
+    o:["CPU","مدر بورڈ","ROM","کولنگ فین"], a:1 },
+
+  { q:"کس قسم کی میموری عارضی اور volatile ہے، جو فی الوقت استعمال ہونے والے ڈیٹا اور ہدایات کو رکھتی ہے؟",
+    o:["ROM","ہارڈ ڈسک","RAM","SSD"], a:2 },
+
+  { q:"ROM کو بہترین طور پر کس طرح بیان کیا جاتا ہے؟",
+    o:["فی الوقت استعمال ہونے والے ڈیٹا کو رکھنے والی volatile میموری","ایک قسم کی سیکنڈری سٹوریج","ایک کمیونیکیشن ڈیوائس","مستقل، غیر volatile میموری جو ضروری اسٹارٹ اپ ہدایات محفوظ رکھتی ہے"], a:3 },
+
+  { q:"پاور سپلائی یونٹ (PSU) کون سا کام انجام دیتا ہے؟",
+    o:["آؤٹ لیٹ سے بجلی کو اندرونی پرزوں کے لیے قابل استعمال بجلی میں تبدیل کرتا ہے","CPU کو ٹھنڈا کرتا ہے","ڈیٹا مستقل طور پر محفوظ کرتا ہے","کمپیوٹر کو انٹرنیٹ سے جوڑتا ہے"], a:0 },
+
+  { q:"کون سا جزو CPU اور دیگر اجزاء سے پیدا ہونے والی حرارت کو خارج کرتا ہے؟",
+    o:["ایکسپینشن سلاٹ","کولنگ فین / ہیٹ سنک","مدر بورڈ","پاور سپلائی یونٹ"], a:1 },
+
+  { q:"ایکسپینشن سلاٹس اور کارڈز کس کی اجازت دیتے ہیں؟",
+    o:["CPU کو ٹھنڈا ہونے کی","ڈیٹا مستقل طور پر محفوظ کرنے کی","اضافی اجزاء جیسے گرافکس اور ساؤنڈ کارڈز شامل کرنے کی","صرف وائی فائی سے جڑنے کی"], a:2 },
+
+  { q:"IPO سائیکل کا اصل 'Process' مرحلہ کہاں ہوتا ہے؟",
+    o:["اِن پُٹ ڈیوائسز","آؤٹ پُٹ ڈیوائسز","سٹوریج ڈیوائسز","سسٹم یونٹ"], a:3 },
+
+  { q:"سسٹم یونٹ کو بابیج کے اینالیٹیکل انجن کے کس حصے کا الیکٹرانک مساوی کہا جاتا ہے؟",
+    o:["مل","اسٹور","پنچڈ کارڈز","آؤٹ پُٹ پرنٹر"], a:0 },
+
+  { q:"پرائمری سٹوریج ہے:",
+    o:["غیر volatile اور مستقل","volatile، بجلی بند ہونے پر ڈیٹا ضائع ہو جاتا ہے","سیکنڈری سٹوریج سے سست","ہمیشہ سیکنڈری سٹوریج سے بڑی صلاحیت کی"], a:1 },
+
+  { q:"درج ذیل میں سے کون سی پرائمری سٹوریج کی مثال ہے؟",
+    o:["ہارڈ ڈسک","USB فلیش ڈرائیو","RAM","آپٹیکل ڈسک"], a:2 },
+
+  { q:"پرائمری سٹوریج کے مقابلے میں، سیکنڈری سٹوریج ہے:",
+    o:["تیز لیکن کم صلاحیت کی","volatile اور عارضی","فی GB ہمیشہ زیادہ مہنگی","غیر volatile اور بجلی کے بغیر ڈیٹا محفوظ رکھتی ہے"], a:3 },
+
+  { q:"ہارڈ ڈسک ڈرائیو (HDD) کون سی سٹوریج ٹیکنالوجی استعمال کرتی ہے؟",
+    o:["مقناطیسی","فلیش بیسڈ","آپٹیکل","نیٹ ورک بیسڈ"], a:0 },
+
+  { q:"کون سا سٹوریج ڈیوائس تیز اور پائیدار بتایا جاتا ہے جس میں کوئی حرکت کرنے والا پرزہ نہیں؟",
+    o:["HDD","SSD","آپٹیکل ڈسک","مقناطیسی ٹیپ"], a:1 },
+
+  { q:"کلاؤڈ سٹوریج ڈیٹا محفوظ کرتی ہے:",
+    o:["USB فلیش ڈرائیو پر","RAM میں","ریموٹ سرورز پر، انٹرنیٹ کے ذریعے قابل رسائی","آپٹیکل ڈسکس پر"], a:2 },
+
+  { q:"کون سی سٹوریج ٹیکنالوجی لیزر سے پڑھے جانے والے پیٹرنز کے ذریعے ڈیٹا محفوظ کرتی ہے؟",
+    o:["مقناطیسی","فلیش بیسڈ","نیٹ ورک بیسڈ","آپٹیکل"], a:3 },
+
+  { q:"میموری کارڈز (SD کارڈز) چھوٹے سٹوریج ڈیوائسز ہیں جو عام طور پر کس میں استعمال ہوتے ہیں؟",
+    o:["کیمرے، فون اور پورٹیبل ڈیوائسز","صرف ڈیسک ٹاپ سرورز","مین فریم کمپیوٹرز","روٹرز"], a:0 },
+
+  { q:"کون سا کمیونیکیشن ڈیوائس ڈیجیٹل ڈیٹا کو اینالاگ سگنلز میں (اور واپس) تبدیل کرتا ہے؟",
+    o:["روٹر","موڈیم","NIC","سوئچ"], a:1 },
+
+  { q:"نیٹ ورک انٹرفیس کارڈ (NIC) کمپیوٹر کو کس قابل بناتا ہے؟",
+    o:["ڈیجیٹل سگنلز کو اینالاگ میں تبدیل کرنا","دستاویزات پرنٹ کرنا","وائرڈ لوکل نیٹ ورک (ایتھرنیٹ) سے جڑنا","ڈیٹا مستقل طور پر محفوظ کرنا"], a:2 },
+
+  { q:"کون سا آلہ نیٹ ورکس کے درمیان ڈیٹا ٹریفک کو ہدایت دیتا ہے اور ڈیوائسز کو انٹرنیٹ سے جوڑتا ہے؟",
+    o:["موڈیم","ہب","وائی فائی اڈاپٹر","روٹر"], a:3 },
+
+  { q:"بلوٹوتھ اڈاپٹر کس لیے استعمال ہوتا ہے؟",
+    o:["قریبی ڈیوائسز کے درمیان مختصر فاصلے کی وائرلیس کمیونیکیشن","طویل فاصلے کی سیٹلائٹ کمیونیکیشن","وائرڈ نیٹ ورکنگ","آپٹیکل ڈیٹا سٹوریج"], a:0 },
+
+  { q:"ہب یا سوئچ کس لیے استعمال ہوتا ہے؟",
+    o:["اینالاگ سگنلز کو ڈیجیٹل میں تبدیل کرنا","لوکل ایریا نیٹ ورک (LAN) میں متعدد ڈیوائسز کو جوڑنا","سسٹم یونٹ کو ٹھنڈا کرنا","ڈیٹا طویل مدت تک محفوظ کرنا"], a:1 },
+
+  { q:"ڈیٹا فلو کے لحاظ سے، اِن پُٹ ڈیوائسز ڈیٹا منتقل کرتے ہیں:",
+    o:["کمپیوٹر سے انسان کی طرف","کمپیوٹر سے نیٹ ورک کی طرف","انسان سے کمپیوٹر کی طرف","صرف اندرونی طور پر"], a:2 },
+
+  { q:"درج ذیل میں سے کون سا پیری فیرل ہے؟",
+    o:["CPU","مدر بورڈ","RAM","کی بورڈ"], a:3 },
+
+  { q:"سسٹم یونٹ پر پورٹ ہے:",
+    o:["ایک جسمانی کنکشن پوائنٹ جو پیری فیرلز منسلک کرنے کے لیے استعمال ہوتا ہے","ایک قسم کا سافٹ ویئر","ایک سٹوریج ڈیوائس","ایک نیٹ ورک پروٹوکول"], a:0 },
+
+  { q:"وہ سافٹ ویئر جو آپریٹنگ سسٹم کو ہارڈویئر ڈیوائس سے رابطہ کرنے کی اجازت دیتا ہے، کہلاتا ہے:",
+    o:["پورٹ","ڈرائیور","بینڈوتھ","پیری فیرل"], a:1 },
+
+  { q:"بینڈوتھ سے مراد ہے:",
+    o:["کیبل کا جسمانی سائز","ہارڈ ڈسک کی سٹوریج صلاحیت","کمیونیکیشن چینل یا نیٹ ورک پر ڈیٹا کی منتقلی کی زیادہ سے زیادہ شرح","CPU کی رفتار"], a:2 },
+
+  { q:"پلگ اینڈ پلے سے مراد ہے:",
+    o:["ایک گیم کنٹرولر","ایک قسم کی پاور سپلائی","ایک سٹوریج ٹیکنالوجی","منسلک ہونے پر ڈیوائس کا خودکار طور پر پہچانا اور کنفیگر ہونا"], a:3 },
+
+  { q:"IoT کا مطلب ہے:",
+    o:["انٹرنیٹ آف تھنگز","اِن پُٹ آف ٹیکنالوجی","انٹیگریٹڈ آن لائن ٹرانسفر","اِنٹرنل آپریٹنگ ٹرمینل"], a:0 },
+
+  { q:"کمپیوٹرز کی کون سی نسل نے ویکیوم ٹیوبز کو بنیادی ٹیکنالوجی کے طور پر استعمال کیا؟",
+    o:["دوسری","پہلی","تیسری","چوتھی"], a:1 },
+
+  { q:"کمپیوٹرز کی پہلی نسل کا دورانیہ ہے:",
+    o:["1956 – 1963","1964 – 1971","1940 – 1956","1971 – 2010"], a:2 },
+
+  { q:"ENIAC کمپیوٹرز کی کس نسل کی مثال ہے؟",
+    o:["دوسری","تیسری","چوتھی","پہلی"], a:3 },
+
+  { q:"ENIAC نے تقریباً کتنے ویکیوم ٹیوبز استعمال کیے؟",
+    o:["تقریباً 18,000","تقریباً 1,800","تقریباً 180,000","تقریباً 3,000"], a:0 },
+
+  { q:"ENIAC کا وزن تقریباً تھا:",
+    o:["3 ٹن","30 ٹن","300 ٹن","13 ٹن"], a:1 },
+
+  { q:"پہلی نسل کے کمپیوٹرز کون سی پروگرامنگ لینگویج استعمال کرتے تھے؟",
+    o:["اسمبلی لینگویج","COBOL","مشین لینگویج (بائنری کوڈ، 0s اور 1s)","پائتھون"], a:2 },
+
+  { q:"پہلی نسل کے کمپیوٹرز میموری کے لیے کون سی ٹیکنالوجی استعمال کرتے تھے؟",
+    o:["سلیکون چپس","فلیش میموری","کیش میموری","مقناطیسی ڈرمز"], a:3 },
+
+  { q:"دوسری نسل کے کمپیوٹرز نے کون سی بنیادی ٹیکنالوجی استعمال کی؟",
+    o:["ٹرانزسٹرز","ویکیوم ٹیوبز","انٹیگریٹڈ سرکٹس","مائیکرو پروسیسرز"], a:0 },
+
+  { q:"ٹرانزسٹر 1947 میں کہاں ایجاد ہوا؟",
+    o:["IBM لیبز","بیل لیبز","انٹیل","مائیکروسافٹ"], a:1 },
+
+  { q:"درج ذیل میں سے کون سا دوسری نسل کا کمپیوٹر ہے؟",
+    o:["UNIVAC I","IBM System/360","IBM 1401","ایپل II"], a:2 },
+
+  { q:"اسمبلی لینگویج اور ابتدائی ہائی لیول لینگویجز جیسے COBOL اور FORTRAN کس نسل سے تعلق رکھتی ہیں؟",
+    o:["پہلی","تیسری","پانچویں","دوسری"], a:3 },
+
+  { q:"دوسری نسل کے کمپیوٹرز کی رفتار کس میں ناپی جاتی تھی؟",
+    o:["مائیکرو سیکنڈز","ملی سیکنڈز","نینو سیکنڈز","پکو سیکنڈز"], a:0 },
+
+  { q:"انٹیگریٹڈ سرکٹس (ICs) کو کیا بھی کہا جاتا ہے؟",
+    o:["ویکیوم ٹیوبز","سلیکون چپس","مقناطیسی ڈرمز","ٹرانزسٹرز"], a:1 },
+
+  { q:"کس نسل نے آپریٹنگ سسٹمز متعارف کرائے؟",
+    o:["پہلی","دوسری","تیسری","چوتھی"], a:2 },
+
+  { q:"IBM System/360 کمپیوٹرز کی کس نسل سے تعلق رکھتا ہے؟",
+    o:["دوسری","چوتھی","پانچویں","تیسری"], a:3 },
+
+  { q:"ملٹی ٹاسکنگ کمپیوٹرز کی کس نسل سے ممکن ہوئی؟",
+    o:["تیسری","پہلی","دوسری","ان میں سے کوئی نہیں"], a:0 },
+
+  { q:"تیسری نسل کے کمپیوٹرز کی رفتار کس میں ناپی جاتی تھی؟",
+    o:["مائیکرو سیکنڈز","نینو سیکنڈز","ملی سیکنڈز","پکو سیکنڈز"], a:1 },
+
+  { q:"کی بورڈز اور مانیٹرز کس نسل میں متعارف کرائے گئے؟",
+    o:["پہلی","دوسری","تیسری","چوتھی"], a:2 },
+
+  { q:"مائیکرو پروسیسر کس نسل کی بنیادی ٹیکنالوجی تھی؟",
+    o:["تیسری","پانچویں","دوسری","چوتھی"], a:3 },
+
+  { q:"پہلا تجارتی مائیکرو پروسیسر تھا:",
+    o:["انٹیل 4004","انٹیل پینٹیم","AMD رائزن","موٹرولا 68000"], a:0 },
+
+  { q:"انٹیل 4004 مائیکرو پروسیسر کب لانچ ہوا؟",
+    o:["1964","1971","1981","1984"], a:1 },
+
+  { q:"کون سا کمپیوٹر، جو 1981 میں متعارف کرایا گیا، پرسنل کمپیوٹنگ کو معیاری بنایا؟",
+    o:["ایپل میکنٹوش","UNIVAC I","IBM پرسنل کمپیوٹر (PC)","PDP-8"], a:2 },
+
+  { q:"ایپل میکنٹوش (1984) نے کس کو مقبول بنایا؟",
+    o:["ویکیوم ٹیوبز","مشین لینگویج","پنچڈ کارڈز","گرافیکل یوزر انٹرفیس (GUI) اور ماؤس"], a:3 },
+
+  { q:"چوتھی نسل کے کمپیوٹرز کی رفتار کس میں ناپی جاتی تھی؟",
+    o:["پکو سیکنڈز","مائیکرو سیکنڈز","نینو سیکنڈز","ملی سیکنڈز"], a:0 },
+
+  { q:"درج ذیل میں سے کون چوتھی نسل کے کمپیوٹرز سے تعلق رکھتا ہے؟",
+    o:["IBM 1401","IBM PC","IBM System/360","ENIAC"], a:1 },
+
+  { q:"کمپیوٹرز کی پانچویں نسل بنیادی طور پر کس پر مبنی ہے؟",
+    o:["ٹرانزسٹرز","ویکیوم ٹیوبز","آرٹیفیشل انٹیلی جنس","انٹیگریٹڈ سرکٹس"], a:2 },
+
+  { q:"درج ذیل میں سے کون پانچویں نسل کی کمپیوٹنگ کی مثال ہے؟",
+    o:["UNIVAC I","IBM 1401","PDP-11","وائس اسسٹنٹس جیسے سری اور الیکسا"], a:3 },
+
+  { q:"کون سی پروگرامنگ لینگویج عام طور پر AI کی ترقی سے وابستہ ہے؟",
+    o:["پائتھون","COBOL","FORTRAN","اسمبلی لینگویج"], a:0 },
+
+  { q:"AI کے کاموں کو تیز کرنے کے لیے استعمال ہونے والے GPU/TPU ایکسیلیریٹرز کس نسل سے وابستہ ہیں؟",
+    o:["دوسری","پانچویں","تیسری","چوتھی"], a:1 },
+
+  { q:"پہلی نسل کے کمپیوٹرز کس قابل اعتماد مسئلے کا شکار تھے؟",
+    o:["وہ کبھی ناکام نہیں ہوتے تھے","وہ بہت چھوٹے تھے","ویکیوم ٹیوبز بار بار جل جاتی تھیں","وہ بہت کم بجلی استعمال کرتے تھے"], a:2 },
+
+  { q:"پنچڈ کارڈز اور مقناطیسی ٹیپ کس نسل کے اِن پُٹ/آؤٹ پُٹ میڈیا تھے؟",
+    o:["پہلی","تیسری","چوتھی","دوسری"], a:3 },
+
+  { q:"پہلی نسل کے کمپیوٹرز کون سا اِن پُٹ/آؤٹ پُٹ میڈیا استعمال کرتے تھے؟",
+    o:["پنچڈ کارڈز اور پیپر ٹیپ","کی بورڈز اور مانیٹرز","ماؤس اور GUI","وائس اور ٹچ"], a:0 },
+
+  { q:"سب سے قدیم معلوم حساب کرنے والا آلہ کون سا سمجھا جاتا ہے؟",
+    o:["پاسکلین","اباکس","اینالیٹیکل انجن","ناپیئرز بونز"], a:1 },
+
+  { q:"اباکس تقریباً کب حساب کے لیے استعمال ہوتا تھا؟",
+    o:["1617 AD","1642 AD","2400 BC","1890 AD"], a:2 },
+
+  { q:"ناپیئرز بونز، نمبر والی سلاخوں سے حساب کا دستی آلہ، 1617 میں کس نے ایجاد کیا؟",
+    o:["بلیز پاسکل","گوٹ فرائیڈ لائبنز","چارلس بابیج","جان ناپیئر"], a:3 },
+
+  { q:"پاسکلین، پہلا مکینیکل کیلکولیٹر، 1642 میں کس نے بنایا؟",
+    o:["بلیز پاسکل","گوٹ فرائیڈ لائبنز","ہرمن ہولریتھ","جوزف میری جیکارڈ"], a:0 },
+
+  { q:"کس آلے نے پاسکل کے ڈیزائن کو بہتر بنایا اور ضرب اور تقسیم بھی کر سکتا تھا؟",
+    o:["پاسکلین","اسٹیپڈ ریکنر","اباکس","ڈفرنس انجن"], a:1 },
+
+  { q:"اسٹیپڈ ریکنر (1673) کس نے تیار کیا؟",
+    o:["جان ناپیئر","بلیز پاسکل","گوٹ فرائیڈ لائبنز","چارلس بابیج"], a:2 },
+
+  { q:"جیکارڈز لوم (1801) نے کس کا تصور متعارف کرایا؟",
+    o:["ویکیوم ٹیوبز","انٹیگریٹڈ سرکٹس","کلاؤڈ سٹوریج","پروگرام ایبل مشینیں اور پنچڈ کارڈ اِن پُٹ"], a:3 },
+
+  { q:"ڈفرنس انجن (1822)، جو خودکار طور پر ریاضی کی جدولیں حساب اور پرنٹ کرنے کے لیے ڈیزائن کیا گیا، کس نے بنایا؟",
+    o:["چارلس بابیج","ہرمن ہولریتھ","جان ناپیئر","جوزف میری جیکارڈ"], a:0 },
+
+  { q:"چارلس بابیج نے اینالیٹیکل انجن کس سال ڈیزائن کیا؟",
+    o:["1822","1837","1890","1801"], a:1 },
+
+  { q:"کمپیوٹر کا \"باپ\" کس کو سمجھا جاتا ہے؟",
+    o:["بلیز پاسکل","جان ناپیئر","چارلس بابیج","ہرمن ہولریتھ"], a:2 },
+
+  { q:"پہلی پروگرامر کس کو سمجھا جاتا ہے؟",
+    o:["گریس ہوپر","چارلس بابیج","جان ناپیئر","ایڈا لولیس"], a:3 },
+
+  { q:"ایڈا لولیس نے مشین کے لیے پہلا الگورتھم کس سال لکھا؟",
+    o:["1843","1837","1890","1822"], a:0 },
+
+  { q:"ٹیبیولیٹنگ مشین (1890)، جس نے امریکی مردم شماری کے لیے پنچڈ کارڈز استعمال کیے، کس نے تیار کی؟",
+    o:["چارلس بابیج","ہرمن ہولریتھ","بلیز پاسکل","گوٹ فرائیڈ لائبنز"], a:1 },
+
+  { q:"ہرمن ہولریتھ کی کمپنی بعد میں کس کا حصہ بنی؟",
+    o:["انٹیل","ایپل","IBM","مائیکروسافٹ"], a:2 },
+
+  { q:"ٹیبیولیٹنگ مشین (1890) کس لیے استعمال ہوئی؟",
+    o:["کپڑا بُننے کے پیٹرنز بنانے","ریاضی کی جدولیں حساب کرنے","الیکٹرانک میل بھیجنے","امریکی مردم شماری کا ڈیٹا ٹیبیولیٹ کرنے"], a:3 },
+
+  { q:"اینالیٹیکل انجن پر مشتمل تھا:",
+    o:["میموری، ایک کنٹرول یونٹ اور اِن پُٹ/آؤٹ پُٹ","صرف ایک پروسیسر","صرف میموری","ایک موڈیم اور ایک روٹر"], a:0 },
+
+  { q:"کس نسل کی رفتار \"انتہائی بلند (متوازی)\" بتائی گئی ہے؟",
+    o:["صرف ملی سیکنڈز","انتہائی بلند (متوازی پروسیسنگ)","صرف نینو سیکنڈز","صرف پکو سیکنڈز"], a:1 },
+
+  { q:"مور کا قانون کہتا ہے کہ مائیکرو چپ پر ٹرانزسٹرز کی تعداد:",
+    o:["ہر دو سال میں آدھی ہو جاتی ہے","ہر سال تین گنا ہو جاتی ہے","تقریباً ہر دو سال میں دوگنی ہو جاتی ہے جبکہ لاگت کم ہوتی ہے","وقت کے ساتھ مستقل رہتی ہے"], a:2 },
+
+  { q:"GUI (گرافیکل یوزر انٹرفیس) صارفین کو کس کے ذریعے تعامل کی اجازت دیتا ہے؟",
+    o:["صرف ٹائپ شدہ ٹیکسٹ کمانڈز","پنچڈ کارڈز","بائنری کوڈ","آئیکنز، ونڈوز اور ماؤس"], a:3 },
+
+  { q:"ورلڈ وائیڈ ویب کب عوامی طور پر دستیاب ہوئی؟",
+    o:["1991","1984","2007","1981"], a:0 },
+
+  { q:"ENIAC، پہلا جنرل پرپز الیکٹرانک کمپیوٹر، کب مکمل ہوا؟",
+    o:["1951","1946","1947","1958"], a:1 },
+
+  { q:"پہلا انٹیگریٹڈ سرکٹ کب تیار ہوا؟",
+    o:["1947","1971","1958","1964"], a:2 },
+
+  { q:"درج ذیل میں سے کون کمپیوٹر کی بہترین تعریف کرتا ہے؟",
+    o:["ایک آلہ جو صرف ڈیٹا محفوظ کرتا ہے","ایک مشین جو صرف حساب کرتی ہے","ایک آلہ جو صرف انٹرنیٹ براؤزنگ کے لیے استعمال ہوتا ہے","ایک الیکٹرانک آلہ جو ڈیٹا وصول کرتا ہے، محفوظ ہدایات کے مطابق اس پر کارروائی کرتا ہے اور بامعنی معلومات پیدا کرتا ہے"], a:3 },
+
+  { q:"کمپیوٹر کی کون سی خصوصیت کا مطلب ہے کہ یہ تھکاوٹ یا بوریت کے بغیر مسلسل دہرائے جانے والے کام انجام دے سکتا ہے؟",
+    o:["مستقل مزاجی","رفتار","درستگی","استعداد"], a:0 },
+
+  { q:"کمپیوٹر کی پروسیسنگ کی رفتار عام طور پر کس میں ناپی جاتی ہے؟",
+    o:["بائٹس","MIPS / FLOPs","پکسلز","صرف ہرٹز"], a:1 }
+  ];
+
+  /* ============================================================
+     CONSTANTS & STATE
+     ============================================================ */
+  const TOTAL_Q      = QUESTIONS.length;      // 100
+  const TOTAL_TIME   = TOTAL_Q * 60;          // 6000 seconds = 100 minutes
+  const PER_Q_TIME   = 60;                    // 60 seconds per question
+  const LETTERS      = ["ا","ب","ج","د"];
+
+  let state = null;
+  let tickId = null;
+  let fullscreenActive = false;
+  let startedAt = 0;
+
+  const $ = id => document.getElementById(id);
+
+  /* ============================================================
+     SCREEN MANAGEMENT
+     ============================================================ */
+  function showScreen(name){
+    $("screen-start").classList.add("hidden");
+    $("screen-quiz").classList.add("hidden");
+    $("screen-result").classList.add("hidden");
+    $("screen-" + name).classList.remove("hidden");
+    window.scrollTo(0,0);
+  }
+
+  /* ============================================================
+     TIMER FORMATTING
+     ============================================================ */
+  function fmt(sec){
+    sec = Math.max(0, sec);
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return m + ":" + (s < 10 ? "0" : "") + s;
+  }
+
+  /* ============================================================
+     START QUIZ
+     ============================================================ */
+  function startQuiz(){
+    state = {
+      current: 0,
+      answers: new Array(TOTAL_Q).fill(null),
+      totalLeft: TOTAL_TIME,
+      qLeft: PER_Q_TIME,
+      running: true,
+      terminated: false,
+      reason: "",
+      startTs: Date.now(),
+      elapsed: 0
+    };
+    startedAt = Date.now();
+    showScreen("quiz");
+    renderQuestion();
+    updateHeader();
+    if (tickId) clearInterval(tickId);
+    tickId = setInterval(tick, 1000);
+    requestFullscreen();
+  }
+
+  /* ============================================================
+     TIMER TICK
+     ============================================================ */
+  function tick(){
+    if (!state || !state.running) return;
+
+    state.totalLeft--;
+    state.qLeft--;
+    state.elapsed++;
+
+    if (state.totalLeft <= 0){
+      $("pillTime").textContent = "⏱ 0:00";
+      finish("کل وقت ختم ہو گیا — ٹیسٹ خودکار طور پر جمع کر دیا گیا۔");
+      return;
+    }
+
+    if (state.qLeft <= 0){
+      goNext(true);
+      return;
+    }
+
+    updateTimers();
+  }
+
+  function updateTimers(){
+    if (!state) return;
+    $("pillTime").textContent  = "⏱ " + fmt(state.totalLeft);
+    $("pillQTime").textContent = "⏳ " + state.qLeft + "s";
+    if (state.qLeft <= 10) $("pillQTime").classList.add("danger");
+    else $("pillQTime").classList.remove("danger");
+    if (state.totalLeft <= 60) $("pillTime").classList.add("danger");
+  }
+
+  /* ============================================================
+     RENDER QUESTION
+     ============================================================ */
+  function renderQuestion(){
+    const idx = state.current;
+    const q = QUESTIONS[idx];
+
+    $("qNumLabel").textContent = "سوال " + (idx + 1) + " از " + TOTAL_Q;
+    $("qText").textContent = q.q;
+
+    const box = $("optionsBox");
+    box.innerHTML = "";
+
+    q.o.forEach(function(optText, i){
+      const div = document.createElement("div");
+      div.className = "opt";
+      if (state.answers[idx] === i) div.classList.add("selected");
+      div.innerHTML = '<span class="key">' + LETTERS[i] + '</span><span class="txt"></span>';
+      div.querySelector(".txt").textContent = optText;
+      div.addEventListener("click", function(){
+        if (!state.running) return;
+        state.answers[idx] = i;
+        Array.prototype.forEach.call(box.children, function(c){ c.classList.remove("selected"); });
+        div.classList.add("selected");
+        updateHeader();
+      });
+      box.appendChild(div);
+    });
+
+    $("nextBtn").textContent = (idx === TOTAL_Q - 1) ? "✔ ٹیسٹ جمع کریں" : "اگلا ◀";
+  }
+
+  /* ============================================================
+     HEADER / PROGRESS
+     ============================================================ */
+  function updateHeader(){
+    const attempted = state.answers.filter(function(a){ return a !== null; }).length;
+    $("pillQ").textContent   = "سوال " + (state.current + 1) + " / " + TOTAL_Q;
+    $("pillAtt").textContent = "کوشش " + attempted + " / " + TOTAL_Q;
+    $("progressBar").style.width = ((state.current + 1) / TOTAL_Q * 100) + "%";
+    updateTimers();
+  }
+
+  /* ============================================================
+     NEXT / AUTO-ADVANCE
+     ============================================================ */
+  function goNext(auto){
+    if (!state || !state.running) return;
+
+    if (state.current >= TOTAL_Q - 1){
+      finish(auto ? "آخری سوال پر وقت ختم ہو گیا — ٹیسٹ خودکار طور پر جمع کر دیا گیا۔"
+                  : "ٹیسٹ کامیابی سے جمع کر دیا گیا۔");
+      return;
+    }
+
+    state.current++;
+    state.qLeft = PER_Q_TIME;
+    renderQuestion();
+    updateHeader();
+  }
+
+  /* ============================================================
+     FINISH / TERMINATE
+     ============================================================ */
+  function finish(reason){
+    if (!state || !state.running) return;
+    state.running = false;
+    if (tickId){ clearInterval(tickId); tickId = null; }
+
+    if (document.fullscreenElement && document.exitFullscreen){
+      fullscreenActive = false;
+      document.exitFullscreen().catch(function(){});
+    }
+
+    state.reason = reason;
+    state.elapsed = Math.round((Date.now() - state.startTs) / 1000);
+    if (state.elapsed > TOTAL_TIME) state.elapsed = TOTAL_TIME;
+
+    buildResults();
+    saveResultToDB();
+    showScreen("result");
+  }
+
+  function terminate(reason){
+    if (!state || !state.running) return;
+    state.terminated = true;
+    state.running = false;
+    if (tickId){ clearInterval(tickId); tickId = null; }
+
+    $("killReason").textContent = reason;
+    $("killOverlay").classList.remove("hidden");
+
+    if (document.fullscreenElement && document.exitFullscreen){
+      fullscreenActive = false;
+      document.exitFullscreen().catch(function(){});
+    }
+
+    state.elapsed = Math.round((Date.now() - state.startTs) / 1000);
+    if (state.elapsed > TOTAL_TIME) state.elapsed = TOTAL_TIME;
+
+    buildResults();
+    saveResultToDB();
+  }
+
+  $("killBtn").addEventListener("click", function(){
+    $("killOverlay").classList.add("hidden");
+    showScreen("result");
+  });
+
+  /* ============================================================
+     BUILD RESULTS
+     ============================================================ */
+  let lastResult = null;
+
+  function buildResults(){
+    let correct = 0, wrong = 0, skipped = 0, attempted = 0;
+
+    for (let i = 0; i < TOTAL_Q; i++){
+      const a = state.answers[i];
+      if (a === null){ skipped++; }
+      else {
+        attempted++;
+        if (a === QUESTIONS[i].a) correct++;
+        else wrong++;
+      }
+    }
+
+    const pct = Math.round((correct / TOTAL_Q) * 100);
+
+    let grade = "F";
+    if (pct >= 90) grade = "A+";
+    else if (pct >= 80) grade = "A";
+    else if (pct >= 70) grade = "B";
+    else if (pct >= 60) grade = "C";
+    else if (pct >= 50) grade = "D";
+
+    lastResult = {
+      correct: correct, wrong: wrong, skipped: skipped,
+      attempted: attempted, percent: pct, grade: grade,
+      elapsed: state.elapsed, terminated: state.terminated,
+      reason: state.reason, date: new Date().toLocaleString()
+    };
+
+    /* ---- Banner ---- */
+    const banner = $("resultBanner");
+    if (state.terminated){
+      banner.innerHTML = '<div class="warn" style="margin-top:0;"><b>⛔ ٹیسٹ ختم کر دیا گیا:</b> ' +
+                         escapeHtml(state.reason) +
+                         '<br><span class="muted">ختم کرنے سے پہلے جواب دیے گئے سوالات کی ہی جانچ کی گئی ہے۔</span></div>';
+    } else {
+      banner.innerHTML = '<div class="warn" style="background:rgba(34,197,94,.10);border-color:rgba(34,197,94,.45);color:#bbf7d0;margin-top:0;">' +
+                         '<b>✅ ' + escapeHtml(state.reason) + '</b></div>';
+    }
+
+    $("resultSub").textContent = "کوشش کی تاریخ: " + lastResult.date;
+
+    $("scoreVal").textContent = pct + "%";
+    $("scoreVal").className = "val " + (pct >= 50 ? "green" : "red");
+    $("scoreSub").textContent = correct + " / " + TOTAL_Q + " درست";
+
+    $("stCorrect").textContent   = correct;
+    $("stWrong").textContent     = wrong;
+    $("stSkipped").textContent   = skipped;
+    $("stAttempted").textContent = attempted;
+    $("stTime").textContent      = fmt(state.elapsed);
+    $("stGrade").textContent     = grade;
+
+    /* ---- Review ---- */
+    const box = $("reviewBox");
+    box.innerHTML = "";
+    for (let i = 0; i < TOTAL_Q; i++){
+      const q = QUESTIONS[i];
+      const a = state.answers[i];
+      let tagClass, tagText, yourAns;
+
+      if (a === null){
+        tagClass = "sk"; tagText = "غیر کوشش شدہ";
+        yourAns = "—";
+      } else if (a === q.a){
+        tagClass = "ok"; tagText = "درست";
+        yourAns = LETTERS[a] + ". " + q.o[a];
+      } else {
+        tagClass = "no"; tagText = "غلط";
+        yourAns = LETTERS[a] + ". " + q.o[a];
+      }
+
+      const item = document.createElement("div");
+      item.className = "review-item";
+
+      const head = document.createElement("div");
+      head.className = "rq";
+      head.innerHTML = '<span class="tag ' + tagClass + '">' + tagText + '</span> سوال ' + (i + 1) + '. ' + escapeHtml(q.q);
+      item.appendChild(head);
+
+      const y = document.createElement("div");
+      y.className = "ra";
+      y.innerHTML = '<span class="muted">آپ کا جواب:</span> <span class="' +
+                    (a === q.a ? "green" : (a === null ? "amber" : "red")) + '">' +
+                    escapeHtml(yourAns) + '</span>';
+      item.appendChild(y);
+
+      if (a !== q.a){
+        const c = document.createElement("div");
+        c.className = "ra";
+        c.innerHTML = '<span class="muted">درست جواب:</span> <span class="green">' +
+                      LETTERS[q.a] + '. ' + escapeHtml(q.o[q.a]) + '</span>';
+        item.appendChild(c);
+      }
+
+      box.appendChild(item);
+    }
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(m){
+      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[m];
+    });
+  }
+
+  /* ============================================================
+     INDEXEDDB STORAGE (with localStorage fallback)
+     ============================================================ */
+  const DB_NAME = "ICT_Quiz_DB_UR";
+  const DB_VERSION = 1;
+  const STORE = "results";
+
+  function openDB(){
+    return new Promise(function(resolve, reject){
+      if (!("indexedDB" in window)) { reject(new Error("no-idb")); return; }
+      let req;
+      try { req = indexedDB.open(DB_NAME, DB_VERSION); }
+      catch(e){ reject(e); return; }
+
+      req.onupgradeneeded = function(e){
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains(STORE)){
+          db.createObjectStore(STORE, { keyPath: "id", autoIncrement: true });
+        }
+      };
+      req.onsuccess = function(e){ resolve(e.target.result); };
+      req.onerror   = function(e){ reject(e.target.error || new Error("idb-error")); };
+    });
+  }
+
+  function saveResultToDB(){
+    const record = {
+      percent: lastResult.percent,
+      correct: lastResult.correct,
+      wrong: lastResult.wrong,
+      skipped: lastResult.skipped,
+      attempted: lastResult.attempted,
+      grade: lastResult.grade,
+      elapsed: lastResult.elapsed,
+      terminated: lastResult.terminated,
+      date: lastResult.date,
+      ts: Date.now()
+    };
+
+    openDB().then(function(db){
+      const tx = db.transaction(STORE, "readwrite");
+      tx.objectStore(STORE).add(record);
+      tx.oncomplete = function(){ db.close(); };
+      tx.onerror = function(){ db.close(); fallbackSave(record); };
+    }).catch(function(){
+      fallbackSave(record);
+    });
+  }
+
+  function fallbackSave(record){
+    try {
+      const arr = JSON.parse(localStorage.getItem("ict_quiz_results_ur") || "[]");
+      arr.push(record);
+      localStorage.setItem("ict_quiz_results_ur", JSON.stringify(arr.slice(-25)));
+    } catch(e){ /* storage unavailable */ }
+  }
+
+  function loadHistory(){
+    openDB().then(function(db){
+      const tx = db.transaction(STORE, "readonly");
+      const req = tx.objectStore(STORE).getAll();
+      req.onsuccess = function(){
+        renderHistory(req.result || []);
+        db.close();
+      };
+      req.onerror = function(){ db.close(); loadHistoryFallback(); };
+    }).catch(function(){ loadHistoryFallback(); });
+  }
+
+  function loadHistoryFallback(){
+    try {
+      const arr = JSON.parse(localStorage.getItem("ict_quiz_results_ur") || "[]");
+      renderHistory(arr);
+    } catch(e){ renderHistory([]); }
+  }
+
+  function renderHistory(arr){
+    const box = $("historyBox");
+    if (!arr || arr.length === 0){
+      box.innerHTML = "📁 اس ڈیوائس پر کوئی پچھلی کوشش محفوظ نہیں ہے۔";
+      return;
+    }
+    let best = 0;
+    arr.forEach(function(r){ if (r.percent > best) best = r.percent; });
+    const last = arr[arr.length - 1];
+    box.innerHTML = "📁 پچھلی کوششیں: <b>" + arr.length + "</b> &nbsp;|&nbsp; " +
+                    "بہترین اسکور: <b class='green'>" + best + "%</b> &nbsp;|&nbsp; " +
+                    "آخری: <b>" + last.percent + "%</b> (" + escapeHtml(last.grade) + ")" +
+                    (last.terminated ? " <span class='red'>[ختم شدہ]</span>" : "");
+  }
+
+  /* ============================================================
+     ANTI-CHEATING
+     ============================================================ */
+  function requestFullscreen(){
+    const el = document.documentElement;
+    const fn = el.requestFullscreen || el.webkitRequestFullscreen ||
+               el.mozRequestFullScreen || el.msRequestFullscreen;
+    if (fn){
+      try {
+        const p = fn.call(el);
+        if (p && p.then){
+          p.then(function(){ fullscreenActive = true; })
+           .catch(function(){ fullscreenActive = false; });
+        } else {
+          fullscreenActive = true;
+        }
+      } catch(e){ fullscreenActive = false; }
+    }
+  }
+
+  document.addEventListener("fullscreenchange", function(){
+    if (!state || !state.running) return;
+    if (!document.fullscreenElement && fullscreenActive){
+      terminate("آپ نے فل اسکرین موڈ سے باہر آ گئے۔ فل اسکرین سے باہر آنا ٹیسٹ پالیسی کی خلاف ورزی تصور کیا جاتا ہے۔");
+    }
+  });
+  document.addEventListener("webkitfullscreenchange", function(){
+    if (!state || !state.running) return;
+    if (!document.webkitFullscreenElement && fullscreenActive){
+      terminate("آپ نے فل اسکرین موڈ سے باہر آ گئے۔ فل اسکرین سے باہر آنا ٹیسٹ پالیسی کی خلاف ورزی تصور کیا جاتا ہے۔");
+    }
+  });
+
+  /* --- Tab / window switching --- */
+  document.addEventListener("visibilitychange", function(){
+    if (!state || !state.running) return;
+    if (document.hidden){
+      terminate("آپ نے ٹیب تبدیل کیا، براؤزر کو منیمائز کیا، یا ٹیسٹ کو بیک گراؤنڈ میں منتقل کیا۔ یہ تشخیص کے دوران اجازت نہیں ہے۔");
+    }
+  });
+
+  window.addEventListener("blur", function(){
+    if (!state || !state.running) return;
+    if (Date.now() - startedAt < 1500) return;
+    setTimeout(function(){
+      if (state && state.running && !document.hasFocus()){
+        terminate("کوئز ونڈو کا فوکس ختم ہو گیا (آپ نے ٹیسٹ ونڈو سے باہر کلک کیا یا کوئی اور ایپلیکیشن کھولی)۔ ٹیسٹ ختم کر دیا گیا ہے۔");
+      }
+    }, 120);
+  });
+
+  window.addEventListener("beforeunload", function(e){
+    if (state && state.running){
+      e.preventDefault();
+      e.returnValue = "آپ کا ٹیسٹ ابھی جاری ہے۔ باہر نکلنے سے یہ ختم ہو جائے گا۔";
+      return e.returnValue;
+    }
+  });
+
+  /* --- Block back navigation --- */
+  history.pushState({ quiz: true }, "", location.href);
+  window.addEventListener("popstate", function(){
+    history.pushState({ quiz: true }, "", location.href);
+  });
+
+  /* --- Block shortcuts & context menu --- */
+  document.addEventListener("contextmenu", function(e){ e.preventDefault(); });
+  document.addEventListener("copy", function(e){ e.preventDefault(); });
+  document.addEventListener("cut",  function(e){ e.preventDefault(); });
+  document.addEventListener("paste",function(e){ e.preventDefault(); });
+  document.addEventListener("selectstart", function(e){ e.preventDefault(); });
+  document.addEventListener("dragstart", function(e){ e.preventDefault(); });
+
+  document.addEventListener("keydown", function(e){
+    const k = (e.key || "").toLowerCase();
+
+    if (k === "f12"){ e.preventDefault(); return false; }
+
+    if (e.ctrlKey && e.shiftKey && (k === "i" || k === "j" || k === "c")){
+      e.preventDefault(); return false;
+    }
+    if (e.ctrlKey && (k === "u" || k === "s" || k === "p")){
+      e.preventDefault(); return false;
+    }
+    if (e.metaKey && e.altKey && (k === "i" || k === "j" || k === "c")){
+      e.preventDefault(); return false;
+    }
+    if (k === "printscreen"){ e.preventDefault(); return false; }
+
+    if (e.altKey && k === "arrowleft"){ e.preventDefault(); return false; }
+    if (e.altKey && k === "arrowright"){ e.preventDefault(); return false; }
+    if (k === "backspace" && e.target === document.body){ e.preventDefault(); return false; }
+
+    if (e.ctrlKey && /^[1-9]$/.test(k)){ e.preventDefault(); return false; }
+  });
+
+  /* ============================================================
+     EVENT WIRING
+     ============================================================ */
+  $("startBtn").addEventListener("click", startQuiz);
+
+  $("nextBtn").addEventListener("click", function(){ goNext(false); });
+
+  $("reviewToggle").addEventListener("click", function(){
+    const box = $("reviewBox");
+    const hidden = box.classList.contains("hidden");
+    box.classList.toggle("hidden");
+    this.textContent = hidden ? "📋 جوابات کا جائزہ چھپائیں" : "📋 جوابات کا جائزہ دکھائیں";
+  });
+
+  $("restartBtn").addEventListener("click", function(){
+    if (tickId){ clearInterval(tickId); tickId = null; }
+    state = null;
+    lastResult = null;
+    $("reviewBox").classList.add("hidden");
+    $("reviewToggle").textContent = "📋 جوابات کا جائزہ دکھائیں";
+    $("killOverlay").classList.add("hidden");
+    loadHistory();
+    showScreen("start");
+  });
+
+  /* ============================================================
+     INIT
+     ============================================================ */
+  window.addEventListener("load", function(){
+    loadHistory();
+    showScreen("start");
+  });
+
+})();
+</script>
+</body>
+</html>
